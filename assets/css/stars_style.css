@@ -1223,6 +1223,10 @@ input[type="checkbox"] {
 	flex-shrink: 0;
 }
 
+.stars-filter-bar__right .dashicons{
+	line-height: 1 !important;
+}
+
 /* Search input with icon */
 .stars-filter-bar__input-wrap {
 	position: relative;

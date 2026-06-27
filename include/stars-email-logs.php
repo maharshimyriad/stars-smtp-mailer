@@ -16,9 +16,11 @@ global $isAdmin;
 $f_status = isset($_GET['filter_status']) ? sanitize_text_field($_GET['filter_status']) : '';
 $f_type   = isset($_GET['filter_type'])   ? sanitize_text_field($_GET['filter_type'])   : '';
 $f_search = isset($_POST['s'])            ? sanitize_text_field(wp_unslash($_POST['s'])) : ( isset($_GET['s']) ? sanitize_text_field(wp_unslash($_GET['s'])) : '' );
-$f_sdate  = isset($_POST['sdate'])        ? sanitize_text_field($_POST['sdate'])         : '';
-$f_edate  = isset($_POST['edate'])        ? sanitize_text_field($_POST['edate'])         : '';
-$has_filter = $f_status || $f_type || $f_search || $f_sdate || $f_edate;
+$f_sdate  = isset($_POST['sdate'])        ? sanitize_text_field($_POST['sdate'])         : gmdate('d/m/Y');
+$f_edate  = isset($_POST['edate'])        ? sanitize_text_field($_POST['edate'])         : gmdate('d/m/Y');
+$has_filter = $f_status || $f_type || $f_search
+    || ( $f_sdate && $f_sdate !== gmdate('d/m/Y') )
+    || ( $f_edate && $f_edate !== gmdate('d/m/Y') );
 
 $export_url = wp_nonce_url(
     admin_url('admin.php?page=stars-smtpm-email-log&stars_export_csv=1'),
@@ -46,7 +48,7 @@ $clear_url = wp_nonce_url(
                  Unified filter bar — replaces default WP filters
             ================================================ -->
             <div class="stars-filter-bar">
-                <form method="POST" action="<?php echo esc_url(admin_url('admin.php')); ?>"
+                <form method="POST" action="<?php echo esc_url( admin_url('admin.php?page=stars-smtpm-email-log') ); ?>"
                       class="stars-filter-bar__form" id="stars-filter-form">
                     <input type="hidden" name="page" value="stars-smtpm-email-log">
 
