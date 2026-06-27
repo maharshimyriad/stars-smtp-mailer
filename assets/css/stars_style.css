@@ -62,6 +62,7 @@ input[type="checkbox"] {
 /* ============================================================
    Notice / save messages
    ============================================================ */
+   
 .stars_save_msg {
 	margin: 0 0 20px !important;
 	border-radius: var(--stars-radius-sm) !important;
