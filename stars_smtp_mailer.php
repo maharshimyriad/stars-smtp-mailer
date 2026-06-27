@@ -4,7 +4,7 @@
  * Plugin Name: Stars SMTP Mailer
  * Plugin URI: https://myriadsolutionz.com/stars-smtp-mailer/
  * Description: Stars SMTP Mailer Plugin for sending emails through SMTP.
- * Version: 2.2.1
+ * Version: 2.3
  * Author: Myriad Solutionz
  * Author URI: https://myriadsolutionz.com/
  * Text Domain: stars-smtp-mailer
