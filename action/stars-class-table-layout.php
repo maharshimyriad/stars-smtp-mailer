@@ -493,8 +493,30 @@ class STARS_SMTPM_Show_List_Table extends WP_List_Table
     }
     function extra_tablenav($which)
     {
-        // Filters are handled by the custom filter bar in stars-email-logs.php
-        return;
+        if ($this->table_name == STARS_SMTPM_SMTP_SETTINGS)
+            return;
+        global $wpdb;
+        if ($which == "top") {
+            $min = $wpdb->get_row(
+                $wpdb->prepare(
+                    "SELECT mail_date FROM {$this->table_name} ORDER BY mail_date ASC LIMIT %d",
+                    1
+                )
+            );
+            $sdate = (isset($_POST['sdate'])
+                ? sanitize_text_field($_POST['sdate'])
+                : (isset($min->mail_date) && $min->mail_date != '' ? gmdate('d/m/Y', strtotime($min->mail_date)) : gmdate('d/m/Y')));
+            $edate = (isset($_POST['edate']) ? sanitize_text_field($_POST['edate']) : gmdate('d/m/Y'));
+            ?>
+            <div class="alignleft actions">
+                <input placeholder="Date From" name="sdate" type="text" value="<?php echo esc_attr($sdate); ?>"
+                    class="stars_datepicker" id="sdate" />
+                <input placeholder="Date To" name="edate" type="text" value="<?php echo esc_attr($edate); ?>"
+                    class="stars_datepicker" id="edate" />
+                <input type="submit" name="filter_table_action" id="post-query-submit" class="button" value="Filter" />
+            </div>
+            <?php
+        }
     }
     public function get_result()
     {
@@ -546,45 +568,29 @@ class STARS_SMTPM_Show_List_Table extends WP_List_Table
             </script>
             <?php
         }
-        $raw_search = '';
-        if ( $this->table_name == STARS_SMTPM_EMAILS_LOG ) {
-            if ( ! empty( $_POST['s'] ) ) {
-                $raw_search = sanitize_text_field( wp_unslash( $_POST['s'] ) );
-            } elseif ( ! empty( $_GET['s'] ) ) {
-                $raw_search = sanitize_text_field( wp_unslash( $_GET['s'] ) );
-            }
-        }
-
         if (isset($_POST['sdate']) && isset($_POST['edate']) && $this->table_name == STARS_SMTPM_EMAILS_LOG) {
 
+            // Fix #12: sanitize date inputs before use
             $date_tmp = sanitize_text_field(str_replace('/', '-', $_POST['sdate']));
             $sdate    = gmdate('Y-m-d', strtotime($date_tmp));
 
             $date_tmp = sanitize_text_field(str_replace('/', '-', $_POST['edate']));
             $edate    = gmdate('Y-m-d', strtotime($date_tmp));
 
-            $today = gmdate('Y-m-d');
+            $table_name = $this->table_name;
+            $start_datetime = $sdate . ' 00:00:00';
+            $end_datetime = $edate . ' 23:59:59';
 
-            // Both dates are the default (today) with no other filters — skip date clause, show all
-            $date_is_default = ( $sdate === $today && $edate === $today );
-            $other_filters   = $raw_search !== '' || ! empty( $_POST['filter_status'] ) || ! empty( $_POST['filter_type'] );
-
-            if ( ! $date_is_default || $other_filters ) {
-                $table_name     = $this->table_name;
-                $start_datetime = $sdate . ' 00:00:00';
-                $end_datetime   = $edate . ' 23:59:59';
-
-                $cur_form_res = $wpdb->get_results(
-                    $wpdb->prepare(
-                        "SELECT * FROM {$table_name} WHERE (mail_date BETWEEN %s AND %s) LIMIT 200",
-                        $start_datetime,
-                        $end_datetime
-                    ),
-                    ARRAY_A
-                );
-            }
-        } else if ( $raw_search !== '' && $this->table_name == STARS_SMTPM_EMAILS_LOG ) {
-            $search = '%' . $wpdb->esc_like( $raw_search ) . '%';
+            $cur_form_res = $wpdb->get_results(
+                $wpdb->prepare(
+                    "SELECT * FROM {$table_name} WHERE (mail_date BETWEEN %s AND %s) LIMIT 200",
+                    $start_datetime,
+                    $end_datetime
+                ),
+                ARRAY_A
+            );
+        } else if (isset($_GET['s']) && trim($_GET['s']) != "" && $this->table_name == STARS_SMTPM_EMAILS_LOG) {
+            $search = '%' . $wpdb->esc_like(sanitize_text_field($_GET['s'])) . '%';
             $table_name = $this->table_name;
 
             $cur_form_res = $wpdb->get_results(
@@ -608,8 +614,8 @@ class STARS_SMTPM_Show_List_Table extends WP_List_Table
             );
         } else {
             // Status / type filter from dropdown
-            $filter_status = isset($_POST['filter_status']) ? sanitize_text_field($_POST['filter_status']) : ( isset($_GET['filter_status']) ? sanitize_text_field($_GET['filter_status']) : '' );
-            $filter_type   = isset($_POST['filter_type'])   ? sanitize_text_field($_POST['filter_type'])   : ( isset($_GET['filter_type'])   ? sanitize_text_field($_GET['filter_type'])   : '' );
+            $filter_status = isset($_GET['filter_status']) ? sanitize_text_field($_GET['filter_status']) : '';
+            $filter_type   = isset($_GET['filter_type'])   ? sanitize_text_field($_GET['filter_type'])   : '';
 
             if ( $this->table_name == STARS_SMTPM_EMAILS_LOG && ( $filter_status !== '' || $filter_type !== '' ) ) {
                 $table_name = $this->table_name;
@@ -637,7 +643,7 @@ class STARS_SMTPM_Show_List_Table extends WP_List_Table
                 );
             }
         }
-        return ( isset($cur_form_res) && $cur_form_res ? $cur_form_res : array() );
+        return ($cur_form_res ? $cur_form_res : array());
     }
 
     public function get_table_columns()
