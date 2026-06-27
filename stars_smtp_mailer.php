@@ -42,6 +42,7 @@ stars_smtpm_define('STARS_SMTPM_MYRIAD_LOGO', STARS_SMTPM_PLUGIN_URL . '/' . bas
 //Configuration files
 include 'action/stars_function.php';
 
+
 /**Create tables */
 register_activation_hook(__FILE__, 'stars_smtpm_create_table');
 function stars_smtpm_create_table()
