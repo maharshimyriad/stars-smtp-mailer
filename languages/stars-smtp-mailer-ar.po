@@ -26,7 +26,7 @@ msgstr "النجوم Smtp Mailer"
 
 #. Plugin URI of the plugin
 #: stars_smtp_mailer.php
-msgid "https://staging.myriadsolutionz.com/stars-smtp-mailer/"
+msgid "https://myriadsolutionz.com/stars-smtp-mailer/"
 msgstr "Https: //Myriadsolutionz.Com/Stars-Smtp-Mailer/"
 
 #. Description of the plugin
@@ -41,7 +41,7 @@ msgstr "حلول Myriad"
 
 #. Author URI of the plugin
 #: stars_smtp_mailer.php
-msgid "https://staging.myriadsolutionz.com/"
+msgid "https://myriadsolutionz.com/"
 msgstr "Https: //Myriadsolutionz.Com/"
 
 #: action/stars-class-table-layout.php:172

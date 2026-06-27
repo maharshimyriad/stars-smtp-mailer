@@ -21,7 +21,7 @@ msgstr ""
 
 #. Plugin URI of the plugin
 #: stars_smtp_mailer.php
-msgid "https://staging.myriadsolutionz.com/stars-smtp-mailer/"
+msgid "https://myriadsolutionz.com/stars-smtp-mailer/"
 msgstr ""
 
 #. Description of the plugin
@@ -36,7 +36,7 @@ msgstr ""
 
 #. Author URI of the plugin
 #: stars_smtp_mailer.php
-msgid "https://staging.myriadsolutionz.com/"
+msgid "https://myriadsolutionz.com/"
 msgstr ""
 
 #: action/stars-class-table-layout.php:172

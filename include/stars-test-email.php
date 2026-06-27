@@ -188,7 +188,7 @@ if (
          </div><!-- /.col-md-3 -->
       </div><!-- clearfix -->
       <div class="stars_footer">
-         <a href="https://staging.myriadsolutionz.com/" target="_blank">
+         <a href="https://myriadsolutionz.com/" target="_blank">
             <img src="<?php echo esc_url(STARS_SMTPM_MYRIAD_LOGO); ?>" alt="<?php echo esc_attr('logo'); ?>"
                title="<?php echo esc_attr('Myriad Solutionz'); ?>" />
          </a>

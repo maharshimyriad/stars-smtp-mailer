@@ -2,11 +2,11 @@
 
 /**
  * Plugin Name: Stars SMTP Mailer
- * Plugin URI: https://staging.myriadsolutionz.com/stars-smtp-mailer/
+ * Plugin URI: https://myriadsolutionz.com/stars-smtp-mailer/
  * Description: Stars SMTP Mailer Plugin for sending emails through SMTP.
  * Version: 2.2.1
  * Author: Myriad Solutionz
- * Author URI: https://staging.myriadsolutionz.com/
+ * Author URI: https://myriadsolutionz.com/
  * Text Domain: stars-smtp-mailer
  * Domain Path: /languages
  * License: GPL-3.0
@@ -649,7 +649,7 @@ function starssmtpm_generate_email_statistics_html() {
     <table width="100%" cellpadding="0" cellspacing="0" style="font-family:sans-serif; background-color:#f6f7f9; padding:40px;">
         <tr>
             <td align="center">
-                <img src="https://staging.myriadsolutionz.com/wp-content/uploads/2025/07/smtp-mailer-1.png" alt="Stars SMTP Mailer" height="60" />
+                <img src="https://myriadsolutionz.com/wp-content/uploads/2025/07/smtp-mailer-1.png" alt="Stars SMTP Mailer" height="60" />
             </td>
         </tr>
         <tr><td height="30"></td></tr>

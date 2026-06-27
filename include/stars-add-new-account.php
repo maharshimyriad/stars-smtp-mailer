@@ -361,7 +361,7 @@ $title = $is_edit
       </div><!-- /.stars_wrap -->
 
       <div class="stars_footer">
-         <a href="https://staging.myriadsolutionz.com/" target="_blank">
+         <a href="https://myriadsolutionz.com/" target="_blank">
             <img src="<?php echo esc_url(STARS_SMTPM_MYRIAD_LOGO); ?>" alt="logo" title="Myriad Solutionz" />
          </a>
       </div>

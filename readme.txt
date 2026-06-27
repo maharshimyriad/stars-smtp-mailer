@@ -1,8 +1,8 @@
 === Stars SMTP Mailer ===
 Contributors: aditya.dugar
 Author: Myriad Solutionz
-Author URI: https://staging.myriadsolutionz.com
-Plugin URI: https://staging.myriadsolutionz.com/stars-smtp-mailer
+Author URI: https://myriadsolutionz.com
+Plugin URI: https://myriadsolutionz.com/stars-smtp-mailer
 Tags: smtp mailer,mail log,wp smtp,php mail alternative,smtp plugin
 Requires at least: 5.8 or higher
 Tested up to: 6.8
