@@ -1186,10 +1186,14 @@ input[type="checkbox"] {
 	height: 16px;
 }
 
-.stars-filter_container{
-	display: flex;
-	gap: 12px;
-	align-items: center;
+.stars-filter_container {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    background: white;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 16px;
 }
 
 .stars-filter_container p.search-box{

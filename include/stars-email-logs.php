@@ -56,16 +56,20 @@ $export_url = wp_nonce_url(
                     <select name="filter_status" class="stars-filter-select">
                         <option value=""><?php esc_html_e('All statuses', 'stars-smtp-mailer'); ?></option>
                         <option value="Sent" <?php selected(isset($_GET['filter_status']) ? sanitize_text_field($_GET['filter_status']) : '', 'Sent'); ?>>
-                            <?php esc_html_e('Accepted', 'stars-smtp-mailer'); ?></option>
+                            <?php esc_html_e('Accepted', 'stars-smtp-mailer'); ?>
+                        </option>
                         <option value="Unsent" <?php selected(isset($_GET['filter_status']) ? sanitize_text_field($_GET['filter_status']) : '', 'Unsent'); ?>>
-                            <?php esc_html_e('Failed', 'stars-smtp-mailer'); ?></option>
+                            <?php esc_html_e('Failed', 'stars-smtp-mailer'); ?>
+                        </option>
                     </select>
                     <select name="filter_type" class="stars-filter-select">
                         <option value=""><?php esc_html_e('All types', 'stars-smtp-mailer'); ?></option>
                         <option value="test" <?php selected(isset($_GET['filter_type']) ? sanitize_text_field($_GET['filter_type']) : '', 'test'); ?>>
-                            <?php esc_html_e('Test emails', 'stars-smtp-mailer'); ?></option>
+                            <?php esc_html_e('Test emails', 'stars-smtp-mailer'); ?>
+                        </option>
                         <option value="general" <?php selected(isset($_GET['filter_type']) ? sanitize_text_field($_GET['filter_type']) : '', 'general'); ?>>
-                            <?php esc_html_e('General emails', 'stars-smtp-mailer'); ?></option>
+                            <?php esc_html_e('General emails', 'stars-smtp-mailer'); ?>
+                        </option>
                     </select>
                     <button type="submit" class="button"><?php esc_html_e('Filter', 'stars-smtp-mailer'); ?></button>
                     <?php if (!empty($_GET['filter_status']) || !empty($_GET['filter_type'])): ?>
@@ -74,8 +78,7 @@ $export_url = wp_nonce_url(
                     <?php endif; ?>
                 </form>
 
-                <form action="<?php echo esc_url(admin_url('/admin.php')); ?>" method="GET"
-                    class="stars-float-right star-margin-top-18">
+                <form action="<?php echo esc_url(admin_url('/admin.php')); ?>" method="GET" class="stars-float-right">
                     <p class="search-box">
                         <input type="hidden" name="page" value="<?php echo esc_attr('stars-smtpm-email-log'); ?>">
                         <?php if (isset($_GET['paged']) && sanitize_key($_GET['paged']) !== '') { ?>
@@ -90,9 +93,6 @@ $export_url = wp_nonce_url(
                     </p>
                 </form>
             </div>
-            <form method="POST" name="smtp_accounts_list" id="my-content-id">
-                <?php $Show_List_Table->display(); ?>
-            </form>
 
             <input type="hidden" id="check_admin" value="<?php echo $isAdmin ? '1' : '0'; ?>" />
         </div>
