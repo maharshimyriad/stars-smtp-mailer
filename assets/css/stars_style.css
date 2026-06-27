@@ -1185,3 +1185,136 @@ input[type="checkbox"] {
 	width: 16px;
 	height: 16px;
 }
+
+/* ============================================================
+   Unified filter bar (Email Logs)
+   ============================================================ */
+.stars-filter-bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	flex-wrap: wrap;
+	background: var(--stars-card);
+	border: 1px solid var(--stars-border);
+	border-radius: var(--stars-radius);
+	padding: 12px 16px;
+	margin: 0 0 16px;
+	box-shadow: var(--stars-shadow);
+}
+.stars-filter-bar__form {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: wrap;
+	flex: 1;
+}
+.stars-filter-bar__group {
+	display: flex;
+	align-items: center;
+}
+.stars-filter-bar__group--actions {
+	gap: 6px;
+}
+.stars-filter-bar__right {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	flex-shrink: 0;
+}
+
+/* Search input with icon */
+.stars-filter-bar__input-wrap {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+.stars-filter-bar__icon {
+	position: absolute;
+	left: 9px;
+	color: var(--stars-text-muted);
+	pointer-events: none;
+	flex-shrink: 0;
+}
+.stars-filter-bar__search {
+	padding: 6px 10px 6px 28px !important;
+	border: 1px solid var(--stars-border) !important;
+	border-radius: var(--stars-radius-sm) !important;
+	font-size: 13px !important;
+	height: 32px !important;
+	width: 210px !important;
+	color: var(--stars-text) !important;
+	background: #fff !important;
+	transition: border-color var(--stars-transition), box-shadow var(--stars-transition) !important;
+}
+.stars-filter-bar__search:focus {
+	border-color: var(--stars-primary) !important;
+	box-shadow: var(--stars-shadow-focus) !important;
+	outline: none !important;
+}
+
+/* Date inputs */
+.stars-filter-bar__date {
+	padding: 6px 10px 6px 28px !important;
+	border: 1px solid var(--stars-border) !important;
+	border-radius: var(--stars-radius-sm) !important;
+	font-size: 13px !important;
+	height: 32px !important;
+	width: 120px !important;
+	background: #fff !important;
+	cursor: pointer !important;
+	color: var(--stars-text) !important;
+}
+.stars-filter-bar__date:focus {
+	border-color: var(--stars-primary) !important;
+	box-shadow: var(--stars-shadow-focus) !important;
+	outline: none !important;
+}
+
+/* Apply / Reset buttons */
+.stars-filter-bar__apply {
+	height: 32px !important;
+	line-height: 1 !important;
+	padding: 0 16px !important;
+	font-size: 13px !important;
+}
+.stars-filter-bar__reset {
+	height: 32px !important;
+	line-height: 1 !important;
+	padding: 0 12px !important;
+	font-size: 13px !important;
+}
+
+/* Hide the default WP bulk + Apply row above the table */
+.stars-email-logs .tablenav.top .bulkactions,
+.stars-email-logs .tablenav.top .actions,
+.stars-email-logs .tablenav-pages { }
+
+/* Select overrides */
+.stars-filter-select {
+	height: 32px !important;
+	font-size: 13px !important;
+	border: 1px solid var(--stars-border) !important;
+	border-radius: var(--stars-radius-sm) !important;
+	padding: 0 8px !important;
+	color: var(--stars-label) !important;
+	background: #fff !important;
+}
+.stars-filter-select:focus {
+	border-color: var(--stars-primary) !important;
+	box-shadow: var(--stars-shadow-focus) !important;
+	outline: none !important;
+}
+
+@media (max-width: 900px) {
+	.stars-filter-bar { flex-direction: column; align-items: stretch; }
+	.stars-filter-bar__form { flex-direction: column; align-items: stretch; }
+	.stars-filter-bar__search,
+	.stars-filter-bar__date { width: 100% !important; }
+	.stars-filter-bar__right { justify-content: flex-end; }
+}
+
+/* Hide default WP table nav top row on email logs — we have our own filter bar */
+.stars-email-logs .tablenav.top {
+	display: none !important;
+}
