@@ -475,10 +475,10 @@ function stars_smtpm_mailer_assets($hook)
 {
 
     $style = STARS_SMTPM_PLUGIN_URL . '/' . basename(dirname(__FILE__)) . '/assets/css/stars_style.css';
-    wp_enqueue_style('stars_style', $style);
+    wp_enqueue_style('stars_style', $style, array(), STARS_SMTPM_PLUGIN_VERSION . '.' . filemtime(STARS_SMTPM_PLUGIN_DIR . 'assets/css/stars_style.css'));
 
     $custom = STARS_SMTPM_PLUGIN_URL . '/' . basename(dirname(__FILE__)) . '/assets/js/stars_smtpm_custom.js';
-    wp_enqueue_script('stars_smtpm_custom', $custom);
+    wp_enqueue_script('stars_smtpm_custom', $custom, array('jquery'), STARS_SMTPM_PLUGIN_VERSION . '.' . filemtime(STARS_SMTPM_PLUGIN_DIR . 'assets/js/stars_smtpm_custom.js'), true);
     wp_localize_script('stars_smtpm_custom', 'starsSmtpNotify', array(
         'ajax_url'            => admin_url('admin-ajax.php'),
         'nonce'               => wp_create_nonce('stars_smtp_notify_nonce'),

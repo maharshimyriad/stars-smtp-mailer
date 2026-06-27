@@ -571,14 +571,14 @@ input[type="checkbox"] {
 	white-space: nowrap;
 }
 .stars-status-pill--accepted {
-	background: var(--stars-success-light);
-	color: #007017;
-	border: 1px solid #a7e3a5;
+	background: var(--stars-success-light) !important;
+	color: #007017 !important;
+	border: 1px solid #a7e3a5 !important;
 }
 .stars-status-pill--failed {
-	background: var(--stars-danger-light);
-	color: #b32d2e;
-	border: 1px solid #f5aeae;
+	background: var(--stars-danger-light) !important;
+	color: #b32d2e !important;
+	border: 1px solid #f5aeae !important;
 }
 .stars-status-dot {
 	width: 6px;
