@@ -136,31 +136,28 @@ class STARS_SMTPM_Show_List_Table extends WP_List_Table
 
                 // Status pill
                 if ( $raw_status === 'Sent' ) {
-                    $pill_class = 'stars-status-pill stars-status-pill--accepted';
-                    $pill_label = esc_html__( 'Accepted', 'stars-smtp-mailer' );
-                    $details_btn = '';
+                    $pill_label  = esc_html__( 'Accepted', 'stars-smtp-mailer' );
+                    $status = '<span class="stars-status-pill stars-status-pill--accepted">'
+                        . '<span class="stars-status-dot"></span>'
+                        . $pill_label
+                        . '</span>';
                 } else {
-                    $pill_class  = 'stars-status-pill stars-status-pill--failed';
                     $pill_label  = esc_html__( 'Failed', 'stars-smtp-mailer' );
-                    // Plain-English interpretation of common SMTP errors
                     $plain = self::stars_smtp_plain_error( $debug_op );
-                    $details_btn = sprintf(
-                        '<button type="button" class="stars-error-details-btn" '
-                        . 'data-plain="%s" data-technical="%s" aria-label="%s">%s</button>',
-                        esc_attr( $plain ),
-                        esc_attr( $debug_op ),
-                        esc_attr__( 'View error details', 'stars-smtp-mailer' ),
-                        esc_html__( 'Details', 'stars-smtp-mailer' )
-                    );
+                    $status = '<div class="stars-status-cell">'
+                        . '<span class="stars-status-pill stars-status-pill--failed">'
+                        . '<span class="stars-status-dot"></span>'
+                        . $pill_label
+                        . '</span>'
+                        . '<button type="button" class="stars-error-details-btn" '
+                        . 'data-plain="' . esc_attr( $plain ) . '" '
+                        . 'data-technical="' . esc_attr( $debug_op ) . '" '
+                        . 'aria-label="' . esc_attr__( 'View error details', 'stars-smtp-mailer' ) . '">'
+                        . '<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
+                        . esc_html__( 'Details', 'stars-smtp-mailer' )
+                        . '</button>'
+                        . '</div>';
                 }
-
-                $status = '<p class="email-status">'
-                    . '<span class="' . esc_attr( $pill_class ) . '">'
-                    . '<span class="stars-status-dot"></span>'
-                    . $pill_label
-                    . '</span>'
-                    . ( $details_btn ? ' ' . $details_btn : '' )
-                    . '</p>';
                 $body = $data[$_j]['mail_body'];
                 $from = $data[$_j]['from_email'];
                 $to   = $data[$_j]['email_id'];
