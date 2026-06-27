@@ -31,7 +31,7 @@ $export_url = wp_nonce_url(
             <?php endif; ?>
 
             <a href="<?php echo esc_url($export_url); ?>" class="button stars-export-csv-btn" title="<?php esc_attr_e('Download all log entries as CSV', 'stars-smtp-mailer'); ?>">
-                <span class="dashicons dashicons-download" style="margin-top:3px;"></span>
+                <span class="dashicons dashicons-download" style="margin-top:3px; line-height:1;"></span>
                 <?php esc_html_e('Export CSV', 'stars-smtp-mailer'); ?>
             </a>
 
@@ -46,7 +46,7 @@ $export_url = wp_nonce_url(
                class="button stars-clear-logs-btn"
                id="stars-clear-logs"
                title="<?php esc_attr_e('Delete all email log entries', 'stars-smtp-mailer'); ?>">
-                <span class="dashicons dashicons-trash" style="margin-top:3px;"></span>
+                <span class="dashicons dashicons-trash" style="margin-top:3px; line-height:1;"></span>
                 <?php esc_html_e('Clear Logs', 'stars-smtp-mailer'); ?>
             </a>
 
