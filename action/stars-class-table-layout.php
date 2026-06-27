@@ -131,10 +131,35 @@ class STARS_SMTPM_Show_List_Table extends WP_List_Table
                 unset($data[$_j]['encryption']);
                 $data[$_j]['encryption'] = esc_html($encryption);
             } else if ($this->table_name == STARS_SMTPM_EMAILS_LOG) {
-                $status = '<p class="email-status"><span class="' . esc_attr( strtolower( $data[$_j]['status'] ) ) . '">'
-                    . esc_html( $data[$_j]['status'] === 'Sent' ? __('Accepted', 'stars-smtp-mailer') : ucwords( strtolower( $data[$_j]['status'] ) ) )
+                $raw_status  = $data[$_j]['status'];
+                $debug_op    = $data[$_j]['debug_op'];
+
+                // Status pill
+                if ( $raw_status === 'Sent' ) {
+                    $pill_class = 'stars-status-pill stars-status-pill--accepted';
+                    $pill_label = esc_html__( 'Accepted', 'stars-smtp-mailer' );
+                    $details_btn = '';
+                } else {
+                    $pill_class  = 'stars-status-pill stars-status-pill--failed';
+                    $pill_label  = esc_html__( 'Failed', 'stars-smtp-mailer' );
+                    // Plain-English interpretation of common SMTP errors
+                    $plain = self::stars_smtp_plain_error( $debug_op );
+                    $details_btn = sprintf(
+                        '<button type="button" class="stars-error-details-btn" '
+                        . 'data-plain="%s" data-technical="%s" aria-label="%s">%s</button>',
+                        esc_attr( $plain ),
+                        esc_attr( $debug_op ),
+                        esc_attr__( 'View error details', 'stars-smtp-mailer' ),
+                        esc_html__( 'Details', 'stars-smtp-mailer' )
+                    );
+                }
+
+                $status = '<p class="email-status">'
+                    . '<span class="' . esc_attr( $pill_class ) . '">'
+                    . '<span class="stars-status-dot"></span>'
+                    . $pill_label
                     . '</span>'
-                    . ( $data[$_j]['status'] === 'Unsent' ? '&nbsp;&nbsp;&nbsp;<span class="tooltip-toggle" title="<p>' . esc_attr( $data[$_j]['debug_op'] ) . '</p>">!</span>' : '' )
+                    . ( $details_btn ? ' ' . $details_btn : '' )
                     . '</p>';
                 $body = $data[$_j]['mail_body'];
                 $from = $data[$_j]['from_email'];
@@ -308,6 +333,45 @@ class STARS_SMTPM_Show_List_Table extends WP_List_Table
     public function column_default($item, $column_name)
     {
         return esc_html( isset($item[$column_name]) ? $item[$column_name] : '' );
+    }
+
+    /**
+     * Converts raw SMTP debug output into a plain-English sentence.
+     * Covers the most common failure codes users encounter.
+     */
+    public static function stars_smtp_plain_error( $debug_op ) {
+        $d = strtolower( (string) $debug_op );
+
+        if ( strpos( $d, '535' ) !== false || strpos( $d, 'authentication' ) !== false || strpos( $d, 'auth failed' ) !== false ) {
+            return __( 'Wrong username or password. Double-check your SMTP credentials in the account settings.', 'stars-smtp-mailer' );
+        }
+        if ( strpos( $d, '534' ) !== false || strpos( $d, 'less secure' ) !== false || strpos( $d, 'app password' ) !== false ) {
+            return __( 'Your mail provider requires an App Password instead of your regular password (common with Gmail). Create one in your account security settings.', 'stars-smtp-mailer' );
+        }
+        if ( strpos( $d, '550' ) !== false || strpos( $d, 'user unknown' ) !== false || strpos( $d, 'no such user' ) !== false ) {
+            return __( 'The recipient email address does not exist or was rejected by the destination server.', 'stars-smtp-mailer' );
+        }
+        if ( strpos( $d, '553' ) !== false || strpos( $d, 'not allowed' ) !== false ) {
+            return __( 'The sender address is not allowed. Make sure your From Email matches the account your SMTP provider authorises.', 'stars-smtp-mailer' );
+        }
+        if ( strpos( $d, '554' ) !== false || strpos( $d, 'spam' ) !== false || strpos( $d, 'blocked' ) !== false ) {
+            return __( 'The email was rejected as spam or the sender IP/domain is blocklisted. Try a different sender address or contact your SMTP provider.', 'stars-smtp-mailer' );
+        }
+        if ( strpos( $d, '421' ) !== false || strpos( $d, '452' ) !== false ) {
+            return __( 'The SMTP server is temporarily busy or has too many connections. Wait a few minutes and try again.', 'stars-smtp-mailer' );
+        }
+        if ( strpos( $d, 'connection refused' ) !== false || strpos( $d, 'connection timed out' ) !== false || strpos( $d, 'could not connect' ) !== false ) {
+            return __( 'Could not reach the SMTP server. Check that the host name and port number are correct, and that your server allows outgoing connections on that port.', 'stars-smtp-mailer' );
+        }
+        if ( strpos( $d, 'ssl' ) !== false || strpos( $d, 'tls' ) !== false || strpos( $d, 'certificate' ) !== false || strpos( $d, 'handshake' ) !== false ) {
+            return __( 'SSL/TLS encryption failed. Make sure you have chosen the correct encryption type (TLS for port 587, SSL for port 465).', 'stars-smtp-mailer' );
+        }
+        if ( strpos( $d, 'timeout' ) !== false ) {
+            return __( 'The connection timed out before the server responded. The host may be unreachable or the port may be blocked by your firewall.', 'stars-smtp-mailer' );
+        }
+
+        // Fallback
+        return __( 'An unexpected error occurred. Switch to the Technical tab for the full error message from the server.', 'stars-smtp-mailer' );
     }
     private function sort_data($a, $b)
     {
