@@ -1,0 +1,674 @@
+﻿/* ============================================================
+   Stars SMTP Mailer — Admin Stylesheet  (redesigned)
+   ============================================================ */
+
+/* ----- Reset ------------------------------------------------ */
+input[type="radio"],
+input[type="checkbox"] {
+	width: auto !important;
+}
+
+/* ============================================================
+   CSS Custom Properties
+   ============================================================ */
+:root {
+	--stars-primary:        #2271b1;
+	--stars-primary-hover:  #135e96;
+	--stars-primary-light:  #e8f0fb;
+	--stars-success:        #00a32a;
+	--stars-success-light:  #edfaef;
+	--stars-danger:         #d63638;
+	--stars-danger-light:   #fce8e8;
+	--stars-warning:        #dba617;
+	--stars-border:         #dcdcde;
+	--stars-border-light:   #f0f0f1;
+	--stars-bg:             #f6f7f7;
+	--stars-card:           #ffffff;
+	--stars-text:           #1d2327;
+	--stars-text-muted:     #646970;
+	--stars-label:          #3c434a;
+	--stars-radius:         8px;
+	--stars-radius-sm:      5px;
+	--stars-shadow:         0 1px 4px rgba(0,0,0,.07), 0 4px 16px rgba(0,0,0,.05);
+	--stars-shadow-focus:   0 0 0 2px rgba(34,113,177,.35);
+	--stars-transition:     0.18s ease;
+}
+
+/* ============================================================
+   Page header
+   ============================================================ */
+#wpbody-content > h1 {
+	font-size: 22px;
+	font-weight: 700;
+	color: var(--stars-text);
+	margin: 0 0 20px;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+#wpbody-content > h1::before {
+	content: "";
+	display: inline-block;
+	width: 4px;
+	height: 24px;
+	background: var(--stars-primary);
+	border-radius: 2px;
+	flex-shrink: 0;
+}
+
+/* ============================================================
+   Notice / save messages
+   ============================================================ */
+.stars_save_msg {
+	margin: 0 0 20px !important;
+	border-radius: var(--stars-radius-sm) !important;
+}
+
+/* ============================================================
+   Main card wrap
+   ============================================================ */
+.stars_wrap {
+	margin: 0 0 24px;
+	padding: 0;
+	float: left;
+	overflow: hidden;
+	width: 99%;
+	border-radius: var(--stars-radius);
+	box-shadow: var(--stars-shadow);
+	background: var(--stars-card);
+	border: 1px solid var(--stars-border);
+}
+.stars_wrap .wrap-body {
+	margin: 0;
+	padding: 0;
+	float: left;
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+}
+.stars_wrap .sidebar-content {
+	margin: 0;
+	padding: 0 28px;
+	float: left;
+	width: 100%;
+	box-sizing: border-box;
+}
+.stars_wrap .wrapper {
+	margin: 0;
+	padding: 24px 0;
+	float: left;
+	width: 100%;
+}
+.stars_wrap .none { display: none; }
+
+/* ============================================================
+   Form section headers  (group the fields visually)
+   ============================================================ */
+.stars-form-section {
+	float: left;
+	width: 100%;
+	margin: 0 0 8px;
+}
+.stars-form-section-title {
+	font-size: 11px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: .7px;
+	color: var(--stars-primary);
+	padding: 0 0 8px;
+	margin: 20px 0 4px;
+	border-bottom: 2px solid var(--stars-primary-light);
+	float: left;
+	width: 100%;
+}
+
+/* ============================================================
+   Form groups
+   ============================================================ */
+.stars_wrap .form-group {
+	margin: 0 0 0;
+	padding: 16px 0;
+	float: left;
+	width: 100%;
+	border-bottom: 1px solid var(--stars-border-light);
+	display: flex;
+	align-items: flex-start;
+}
+.stars_wrap .form-group:last-child {
+	border-bottom: none;
+	padding-bottom: 8px;
+}
+
+/* Label column */
+.stars_wrap .form-group > label,
+.stars_wrap .form-group > label:first-child {
+	flex: 0 0 210px;
+	min-width: 210px;
+	font-weight: 600;
+	font-size: 13px;
+	color: var(--stars-label);
+	padding-right: 16px;
+	margin-top: 9px;
+	line-height: 1.4;
+	box-sizing: border-box;
+}
+
+/* Required asterisk */
+.stars_wrap .form-group > label .req-star {
+	color: var(--stars-danger);
+	margin-left: 2px;
+}
+
+/* Input area */
+.stars_wrap .form-group .input-area {
+	flex: 1;
+	min-width: 0;
+	box-sizing: border-box;
+}
+
+/* ============================================================
+   Text / Email / Password inputs
+   ============================================================ */
+.stars_wrap .form-group .input-area input[type="text"],
+.stars_wrap .form-group .input-area input[type="email"],
+.stars_wrap .form-group .input-area input[type="password"],
+.stars_wrap .form-group .input-area input[type="search"] {
+	max-width: 400px;
+	width: 100%;
+	padding: 9px 12px;
+	border: 1px solid var(--stars-border);
+	border-radius: var(--stars-radius-sm);
+	background: #fff;
+	font-size: 13.5px;
+	line-height: 1.5;
+	color: var(--stars-text);
+	transition: border-color var(--stars-transition), box-shadow var(--stars-transition);
+	display: block;
+}
+.stars_wrap .form-group .input-area input[type="text"]:hover,
+.stars_wrap .form-group .input-area input[type="email"]:hover,
+.stars_wrap .form-group .input-area input[type="password"]:hover {
+	border-color: #a0a5aa;
+}
+.stars_wrap .form-group .input-area input[type="text"]:focus,
+.stars_wrap .form-group .input-area input[type="email"]:focus,
+.stars_wrap .form-group .input-area input[type="password"]:focus {
+	border-color: var(--stars-primary);
+	box-shadow: var(--stars-shadow-focus);
+	outline: none;
+}
+
+/* Password wrapper with toggle */
+.stars-pw-wrapper {
+	position: relative;
+	max-width: 400px;
+	display: block;
+}
+.stars-pw-wrapper input[type="password"],
+.stars-pw-wrapper input[type="text"] {
+	max-width: 100% !important;
+	width: 100% !important;
+	padding-right: 42px !important;
+}
+.stars-pw-toggle {
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	transform: translateY(-50%);
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 4px;
+	color: var(--stars-text-muted);
+	line-height: 1;
+	transition: color var(--stars-transition);
+}
+.stars-pw-toggle:hover { color: var(--stars-primary); }
+.stars-pw-toggle svg { display: block; pointer-events: none; }
+
+/* ============================================================
+   Radio buttons — pill style
+   ============================================================ */
+.stars-radio-group {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 4px 0 0;
+}
+.stars-radio-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	padding: 7px 16px 7px 12px;
+	border: 1.5px solid var(--stars-border);
+	border-radius: 20px;
+	cursor: pointer;
+	font-size: 13px;
+	font-weight: 500;
+	color: var(--stars-label);
+	background: #fafafa;
+	transition: all var(--stars-transition);
+	user-select: none;
+}
+.stars-radio-pill:hover {
+	border-color: var(--stars-primary);
+	background: var(--stars-primary-light);
+	color: var(--stars-primary);
+}
+.stars-radio-pill input[type="radio"] {
+	margin: 0 !important;
+	accent-color: var(--stars-primary);
+	width: 15px !important;
+	height: 15px !important;
+	cursor: pointer;
+}
+.stars-radio-pill:has(input[type="radio"]:checked) {
+	border-color: var(--stars-primary);
+	background: var(--stars-primary-light);
+	color: var(--stars-primary);
+	font-weight: 600;
+}
+
+/* ============================================================
+   Textarea
+   ============================================================ */
+.stars_wrap textarea {
+	width: 100%;
+	max-width: 480px;
+	padding: 9px 12px;
+	border: 1px solid var(--stars-border);
+	border-radius: var(--stars-radius-sm);
+	font-size: 13.5px;
+	line-height: 1.6;
+	color: var(--stars-text);
+	resize: vertical;
+	transition: border-color var(--stars-transition), box-shadow var(--stars-transition);
+	display: block;
+}
+.stars_wrap textarea:hover  { border-color: #a0a5aa; }
+.stars_wrap textarea:focus {
+	border-color: var(--stars-primary);
+	box-shadow: var(--stars-shadow-focus);
+	outline: none;
+}
+
+/* ============================================================
+   Tooltip / hint text
+   ============================================================ */
+.stars-font-italic { font-style: italic; }
+.stars-input-tooltip {
+	display: block;
+	margin: 6px 0 0;
+	font-size: 12px;
+	color: var(--stars-text-muted);
+	max-width: 440px;
+	line-height: 1.5;
+	font-style: normal;
+}
+
+/* Server check feedback */
+.check_error {
+	display: block;
+	margin-top: 6px;
+	font-size: 12px;
+	font-weight: 500;
+}
+
+/* ============================================================
+   Validation error label
+   ============================================================ */
+.stars_wrap label.error,
+.stars_wrap .user_error {
+	display: block;
+	clear: both;
+	color: var(--stars-danger);
+	font-size: 12px;
+	margin-top: 5px;
+	font-weight: 500;
+	background: var(--stars-danger-light);
+	border-left: 3px solid var(--stars-danger);
+	padding: 4px 8px;
+	border-radius: 0 3px 3px 0;
+}
+
+/* ============================================================
+   Submit / action row
+   ============================================================ */
+.stars-form-actions {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-top: 4px;
+	flex-wrap: wrap;
+}
+.stars-form-actions .button-primary {
+	padding: 9px 28px !important;
+	font-size: 13.5px !important;
+	border-radius: var(--stars-radius-sm) !important;
+	height: auto !important;
+	line-height: 1.4 !important;
+	font-weight: 600 !important;
+	letter-spacing: .2px;
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.button-danger {
+	background: var(--stars-danger) !important;
+	color: #fff !important;
+	border-color: #b32d2e !important;
+}
+.button-danger:hover { background: #b32d2e !important; }
+.stars-btn-green {
+	background-color: var(--stars-success) !important;
+	border-color: #007017 !important;
+	color: #fff !important;
+}
+.stars-btn-green:hover { background-color: #007017 !important; }
+.stars-btn-red {
+	background-color: var(--stars-danger) !important;
+	border-color: #b32d2e !important;
+	color: #fff !important;
+}
+.stars-btn-red:hover { background-color: #b32d2e !important; }
+.stars-btn-width { min-width: 100px; }
+
+/* ============================================================
+   Utility
+   ============================================================ */
+.stars-float-left  { float: left; }
+.stars-float-right { float: right; }
+.star-margin-top-18 { margin-top: 18px; }
+
+/* ============================================================
+   Layout: two-column (form + pro sidebar)
+   ============================================================ */
+.col-md-9 {
+	width: 67% !important;
+	float: left;
+	box-sizing: border-box;
+}
+.col-md-3 {
+	width: 30% !important;
+	margin-left: 2% !important;
+	float: left;
+	box-sizing: border-box;
+}
+
+/* ============================================================
+   Pro version sidebar
+   ============================================================ */
+.star-pro-version {
+	margin: 0;
+	padding: 0;
+	border-radius: var(--stars-radius);
+	overflow: hidden;
+	float: left;
+	width: 100%;
+	box-shadow: var(--stars-shadow);
+	background: var(--stars-card);
+	border: 1px solid var(--stars-border);
+}
+.star-pro-version img {
+	width: 100%;
+	background-color: #0ab1cc;
+	padding: 18px 16px;
+	float: left;
+	box-sizing: border-box;
+	display: block;
+}
+.star-pro-version h2 {
+	font-size: 13.5px;
+	font-weight: 700;
+	margin: 0;
+	padding: 11px 16px;
+	float: left;
+	width: 100%;
+	box-sizing: border-box;
+	background: linear-gradient(135deg, #0ab1cc 0%, #0998af 100%);
+	color: #ffffff;
+	text-align: center;
+	letter-spacing: .4px;
+}
+.star-pro-version-features ul {
+	margin: 0;
+	padding: 0;
+	float: left;
+	width: 100%;
+	list-style: none;
+}
+.star-pro-version-features ul li {
+	display: block;
+	padding: 9px 16px;
+	width: 100%;
+	box-sizing: border-box;
+	border-bottom: 1px solid var(--stars-border-light);
+	font-size: 12.5px;
+	color: var(--stars-label);
+}
+.star-pro-version-features ul li:last-child { border-bottom: none; padding: 14px 16px; }
+.star-pro-version-features ul li::before {
+	content: "✓  ";
+	color: var(--stars-success);
+	font-weight: 700;
+}
+.star-pro-version-features ul li:last-child::before { content: ""; }
+
+/* ============================================================
+   "Get Notified" text
+   ============================================================ */
+.stars-pro-notification-text {
+	font-size: 11.5px;
+	color: var(--stars-text-muted);
+	margin-bottom: 10px;
+	line-height: 1.5;
+}
+
+/* ============================================================
+   Notification modal overlay
+   ============================================================ */
+.stars-pro-notification-modal-overlay {
+	position: fixed;
+	top: 0; left: 0;
+	width: 100%; height: 100%;
+	background: rgba(0,0,0,.55);
+	display: none;
+	justify-content: center;
+	align-items: center;
+	z-index: 99999;
+}
+.stars-pro-notification-modal-box {
+	background: #fff;
+	padding: 32px 36px;
+	border-radius: var(--stars-radius);
+	max-width: 420px;
+	width: calc(100% - 40px);
+	text-align: center;
+	box-shadow: 0 12px 40px rgba(0,0,0,.2);
+}
+.stars-pro-notification-modal-box h2 {
+	margin: 0 0 18px;
+	font-size: 19px;
+	font-weight: 700;
+	color: var(--stars-text);
+	background: none;
+	padding: 0;
+	float: none;
+	width: auto;
+	text-align: center;
+}
+.stars-pro-notification-modal-box input[type="email"] {
+	width: 100%;
+	padding: 9px 12px;
+	margin-bottom: 14px;
+	border: 1px solid var(--stars-border);
+	border-radius: var(--stars-radius-sm);
+	font-size: 13.5px;
+	box-sizing: border-box;
+	transition: border-color var(--stars-transition), box-shadow var(--stars-transition);
+}
+.stars-pro-notification-modal-box input[type="email"]:focus {
+	border-color: var(--stars-primary);
+	box-shadow: var(--stars-shadow-focus);
+	outline: none;
+}
+.stars-pro-notification-modal-box button[type="submit"] {
+	padding: 9px 24px;
+	background: var(--stars-primary);
+	color: #fff;
+	border: none;
+	border-radius: var(--stars-radius-sm);
+	cursor: pointer;
+	font-size: 13.5px;
+	font-weight: 600;
+	margin-bottom: 10px;
+	transition: background var(--stars-transition);
+}
+.stars-pro-notification-modal-box button[type="submit"]:hover {
+	background: var(--stars-primary-hover);
+}
+.stars-pro-notification-modal-box .close-modal {
+	display: block;
+	background: none;
+	border: none;
+	color: var(--stars-text-muted);
+	text-decoration: underline;
+	cursor: pointer;
+	font-size: 12.5px;
+	margin-top: 6px;
+}
+.stars-pro-notification-modal-box .close-modal:hover { color: var(--stars-danger); }
+
+/* ============================================================
+   Email Logs page
+   ============================================================ */
+.stars-email-logs .wp-heading-inline { width: 100%; }
+.stars-email-logs .email-status { margin: 0; }
+.stars-email-logs .email-status .sent   { color: var(--stars-success); font-weight: 600; }
+.stars-email-logs .email-status .unsent { color: var(--stars-danger); font-weight: 600; }
+.stars-email-logs .email-status .tooltip-toggle {
+	display: inline-block;
+	background: var(--stars-danger);
+	padding: 0 7px;
+	border-radius: 50%;
+	color: #fff;
+	cursor: pointer;
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 18px;
+	margin-left: 4px;
+	vertical-align: middle;
+}
+
+/* ============================================================
+   Pagination nav fix
+   ============================================================ */
+.tablenav { float: left; width: 100%; }
+.tablenav-pages-navspan {
+	height: 26px;
+	line-height: 24px;
+	border: 1px solid var(--stars-border);
+	background: #f6f7f7;
+	color: #a7aaad;
+	padding: 0 6px;
+	border-radius: 3px;
+}
+
+/* ============================================================
+   Footer logo
+   ============================================================ */
+.stars_footer {
+	margin: 24px 0 0;
+	padding: 16px 0;
+	width: 100%;
+	float: left;
+	text-align: center;
+	border-top: 1px solid var(--stars-border-light);
+}
+.stars_footer img { width: 140px; opacity: .8; transition: opacity .2s; }
+.stars_footer img:hover { opacity: 1; }
+.stars_footer a:focus { outline: 2px solid var(--stars-primary); outline-offset: 3px; }
+
+/* ============================================================
+   Success / error inline message
+   ============================================================ */
+.stars_wrap .success {
+	color: #007017;
+	background-color: var(--stars-success-light);
+	border: 1px solid #a7e3a5;
+	width: 100%;
+	padding: 12px 16px;
+	border-radius: var(--stars-radius-sm);
+	margin: 10px 0 0;
+	box-sizing: border-box;
+}
+
+/* ============================================================
+   Table inside form
+   ============================================================ */
+.stars_wrap table    { width: 66%; }
+.stars_wrap table td { padding: 15px 0; }
+.stars_wrap td > label { text-transform: uppercase; }
+
+/* ============================================================
+   Accounts list page — status badge
+   ============================================================ */
+.stars-status-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	padding: 3px 10px;
+	border-radius: 12px;
+	font-size: 11.5px;
+	font-weight: 600;
+}
+.stars-status-badge.active {
+	background: var(--stars-success-light);
+	color: #007017;
+	border: 1px solid #a7e3a5;
+}
+.stars-status-badge.inactive {
+	background: #f6f7f7;
+	color: var(--stars-text-muted);
+	border: 1px solid var(--stars-border);
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 1100px) {
+	.col-md-9,
+	.col-md-3 {
+		width: 100% !important;
+		margin-left: 0 !important;
+		float: left;
+	}
+	.star-pro-version { margin-top: 20px; }
+}
+
+@media (max-width: 782px) {
+	.stars_wrap .form-group {
+		flex-direction: column;
+	}
+	.stars_wrap .form-group > label,
+	.stars_wrap .form-group > label:first-child {
+		flex: none;
+		min-width: unset;
+		width: 100%;
+		margin-bottom: 6px;
+		margin-top: 0;
+	}
+	.stars_wrap .form-group .input-area { width: 100%; }
+	.stars_wrap .form-group .input-area input[type="text"],
+	.stars_wrap .form-group .input-area input[type="email"],
+	.stars_wrap .form-group .input-area input[type="password"] {
+		max-width: 100%;
+	}
+	.stars-pw-wrapper { max-width: 100%; }
+	.stars_wrap textarea { max-width: 100%; }
+	.stars-float-right { float: none; }
+	.auto-fold #wpcontent { padding: 0 12px; }
+	#wpbody-content > h1 { font-size: 18px; }
+}

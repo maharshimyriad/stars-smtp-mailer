@@ -1,0 +1,451 @@
+# Copyright (C) 2025 Myriad Solutionz
+# This file is distributed under the GPL-3.0.
+msgid ""
+msgstr ""
+"Project-Id-Version: Stars SMTP Mailer 2.1.6\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/stars-smtp-"
+"mailer\n"
+"Last-Translator: \n"
+"Language-Team: German\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-06-30T07:57:38+02:00\n"
+"PO-Revision-Date: 2025-06-30 11:00+0000\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Domain: stars-smtp-mailer\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Loco-Version: 2.8.0; wp-6.8.1; php-8.2.12"
+
+#. Plugin Name of the plugin
+#: stars_smtp_mailer.php
+msgid "Stars SMTP Mailer"
+msgstr "Stärken Smtp Mailer"
+
+#. Plugin URI of the plugin
+#: stars_smtp_mailer.php
+msgid "https://staging.myriadsolutionz.com/stars-smtp-mailer/"
+msgstr "Https: //Myriadsolutionz.Com/Stars-Smtp-Mailer/"
+
+#. Description of the plugin
+#: stars_smtp_mailer.php
+msgid "Stars SMTP Mailer Plugin for sending emails through SMTP."
+msgstr "Stars Smtp Mailer Plugin für die Sendung von E-Mails über Smtp."
+
+#. Author of the plugin
+#: stars_smtp_mailer.php
+msgid "Myriad Solutionz"
+msgstr "Myriad Lösungen"
+
+#. Author URI of the plugin
+#: stars_smtp_mailer.php
+msgid "https://staging.myriadsolutionz.com/"
+msgstr "Https: //Myriadsolutionz.Com/"
+
+#: action/stars-class-table-layout.php:172
+msgid "From Email"
+msgstr "von Email"
+
+#: action/stars-class-table-layout.php:175
+msgid "SMTP Host"
+msgstr "SMTP Gastgeber"
+
+#: action/stars-class-table-layout.php:178
+msgid "SMTP Port"
+msgstr "SMTP Port"
+
+#: action/stars-class-table-layout.php:181
+msgid "Encryption"
+msgstr "Verschlüsselung"
+
+#: action/stars-class-table-layout.php:184
+msgid "Authentication"
+msgstr "Authentifizierung"
+
+#: action/stars-class-table-layout.php:187
+msgid "Username"
+msgstr "Benutzername"
+
+#: action/stars-class-table-layout.php:190
+#: action/stars-class-table-layout.php:205
+msgid "Status"
+msgstr "Status"
+
+#: action/stars-class-table-layout.php:200
+msgid "Title"
+msgstr "Titel"
+
+#: action/stars-class-table-layout.php:201
+msgid "From"
+msgstr "Von"
+
+#: action/stars-class-table-layout.php:202
+msgid "To"
+msgstr "zu"
+
+#: action/stars-class-table-layout.php:203
+msgid "Email Headers"
+msgstr "E-Mail Header"
+
+#: action/stars-class-table-layout.php:204
+msgid "Date Sent"
+msgstr "Datum gesandt"
+
+#: action/stars-class-table-layout.php:206
+msgid "Attachment"
+msgstr "Anbindung"
+
+#: include/stars-add-new-account.php:26
+msgid "Please enter mandatory fields!"
+msgstr "Bitte geben Sie obligatorische Felder ein!"
+
+#. translators: %s is a link to the test email page.
+#: include/stars-add-new-account.php:54
+#, php-format
+msgid "Account Successfully Saved. %s "
+msgstr "Konto erfolgreich gespeichert. %s"
+
+#: include/stars-add-new-account.php:55
+msgid "Send Test Mail"
+msgstr "Versenden Sie Testmail"
+
+#: include/stars-add-new-account.php:58
+msgid "Oops !!! You can not Add more than 3 accounts."
+msgstr "Und Oops!!! Sie können nicht mehr als 3 Konten hinzufügen."
+
+#: include/stars-add-new-account.php:74
+msgid "Account Successfully Edited"
+msgstr "Konto erfolgreich editiert"
+
+#: include/stars-add-new-account.php:76
+msgid "Something went wrong please try again !!"
+msgstr "Es ging etwas falsch, bitte versuchen Sie es noch einmal!Und dann!"
+
+#: include/stars-add-new-account.php:81
+msgid "Invalid nonce specified. Please try again!"
+msgstr "Invalid nonce angegeben. Bitte versuchen Sie es noch einmal!"
+
+#: include/stars-add-new-account.php:98 include/stars-add-new-account.php:297
+msgid "Add New Account"
+msgstr "Neues Konto hinzufügen"
+
+#: include/stars-add-new-account.php:100 include/stars-add-new-account.php:297
+msgid "Edit Account"
+msgstr "Edit Konto"
+
+#: include/stars-add-new-account.php:122
+msgid "SMTP Host *"
+msgstr "SMTP Gastgeber *"
+
+#: include/stars-add-new-account.php:125
+msgid "Enter SMTP host name"
+msgstr "Geben Sie den Hostname von Smtp ein"
+
+#: include/stars-add-new-account.php:130 include/stars-add-new-account.php:144
+#: include/stars-add-new-account.php:213
+msgid "Enter from name only if you want to override Default Name"
+msgstr ""
+"Geben Sie sich nur aus dem Namen ein, wenn Sie den Standardname "
+"überschreiten möchten"
+
+#: include/stars-add-new-account.php:135
+msgid "SMTP Port *"
+msgstr "SMTP Port *"
+
+#: include/stars-add-new-account.php:138
+msgid "Enter SMTP port no."
+msgstr "Geben Sie den SMS-Port nicht ein."
+
+#: include/stars-add-new-account.php:149
+msgid "Authentication *"
+msgstr "Authentifizierung *"
+
+#: include/stars-add-new-account.php:153
+msgid "True"
+msgstr "Wahrheit"
+
+#: include/stars-add-new-account.php:157
+msgid "False"
+msgstr "Falsch"
+
+#: include/stars-add-new-account.php:160
+msgid ""
+"Whether to use SMTP Authentication when sending an email (Recommended : True "
+")"
+msgstr ""
+"Wie Sie die Smtp-Authentifizierung verwenden, wenn Sie eine E-Mail senden "
+"(Rekommend: wahr)"
+
+#: include/stars-add-new-account.php:165
+msgid "Encryption *"
+msgstr "Verschlüsselung *"
+
+#: include/stars-add-new-account.php:169
+msgid "TLS"
+msgstr "Tls"
+
+#: include/stars-add-new-account.php:173
+msgid "SSL"
+msgstr "SSL"
+
+#: include/stars-add-new-account.php:177
+msgid "None"
+msgstr "Keiner"
+
+#: include/stars-add-new-account.php:183
+msgid "Username *"
+msgstr "Benutzername *"
+
+#: include/stars-add-new-account.php:187
+msgid "Enter Username"
+msgstr "Geben Sie Benutzername"
+
+#: include/stars-add-new-account.php:196
+msgid "Password *"
+msgstr "Passwort *"
+
+#: include/stars-add-new-account.php:199
+msgid "Enter Password"
+msgstr "Passwort eingeben"
+
+#: include/stars-add-new-account.php:206
+msgid "From Name *"
+msgstr "Von Namen *"
+
+#: include/stars-add-new-account.php:209
+msgid "Enter from name"
+msgstr "Gehen Sie vom Namen"
+
+#: include/stars-add-new-account.php:218
+msgid "From Email *"
+msgstr "von E-Mail *"
+
+#: include/stars-add-new-account.php:221
+msgid "Enter from Email"
+msgstr "Eintritt von Email"
+
+#: include/stars-add-new-account.php:225
+msgid "Enter from Email only if you want to override Default Email"
+msgstr ""
+"Geben Sie sich nur von E-Mail ein, wenn Sie die Standard-E-Mail "
+"überschreiten möchten"
+
+#: include/stars-add-new-account.php:230
+msgid "Cc"
+msgstr "Cc"
+
+#: include/stars-add-new-account.php:233
+msgid "Enter CC Email"
+msgstr "CC E-Mail eingeben"
+
+#: include/stars-add-new-account.php:236
+msgid ""
+"Leave CC blank if you don't want to override them.\n"
+"Please note all emails sent from this account will be copied to this email."
+msgstr ""
+"Lassen Sie CC leer, wenn Sie sie nicht überschreiten möchten.\n"
+"Bitte beachten Sie, dass alle E-Mails, die von diesem Konto gesendet werden, "
+"zu diesem E-Mail kopiert werden."
+
+#: include/stars-add-new-account.php:241
+msgid "Bcc"
+msgstr "BCC"
+
+#: include/stars-add-new-account.php:244
+msgid "Enter Bcc Email"
+msgstr "BCC E-Mail eingeben"
+
+#: include/stars-add-new-account.php:247
+msgid ""
+"Leave Bcc blank if you don't want to override them.\n"
+"Please note all emails sent from this account will be blind copied to this "
+"emails."
+msgstr ""
+"Lassen Sie BCC leer, wenn Sie sie nicht überschreiten möchten.\n"
+"Bitte beachten Sie, dass alle E-Mails, die von diesem Konto gesendet werden, "
+"blind auf diese E-Mails kopiert werden."
+
+#: include/stars-add-new-account.php:252
+msgid "Reply To"
+msgstr "Antworten zu"
+
+#: include/stars-add-new-account.php:255
+msgid "Enter Reply To Email Id"
+msgstr "Geben Sie eine Antwort auf Email ID"
+
+#: include/stars-add-new-account.php:259
+msgid ""
+"Enter Reply To Email Id if you want to Set as a Default Reply To Email Id"
+msgstr ""
+"Geben Sie eine Antwort auf E-Mail-ID ein, wenn Sie eine Standard-Reaktion "
+"auf E-Mail-ID festlegen möchten"
+
+#: include/stars-add-new-account.php:264
+msgid "Add Headers"
+msgstr "Hörter hinzufügen"
+
+#: include/stars-add-new-account.php:267
+msgid "MIME-Version: 1.0 , Content-Type: text/html; charset=UTF-8"
+msgstr "Mime-Version: 1.0, Content-Typ: Text/Html; Charset=Utf-8"
+
+#: include/stars-add-new-account.php:271
+msgid ""
+"Please follow this Format Only (Each Headers must be separated by comma \" , "
+"\")"
+msgstr ""
+"Bitte folgen Sie diesem Format nur (alle Header müssen durch Comma getrennt "
+"werden \", \")"
+
+#: include/stars-email-logs.php:19 include/stars-smtp-accounts-list.php:55
+#: include/stars-smtp-accounts-list.php:61
+msgid "Access Restricted"
+msgstr "Zugang eingeschränkt"
+
+#: include/stars-email-logs.php:20 include/stars-smtp-accounts-list.php:55
+#: include/stars-smtp-accounts-list.php:61
+msgid "This feature is available in PRO version!"
+msgstr "Diese Funktion ist in der Pro-Version erhältlich!"
+
+#: include/stars-email-logs.php:28
+msgid "Email Logs"
+msgstr "E-Mail Logs"
+
+#: include/stars-email-logs.php:38
+msgid "Search:"
+msgstr "Suche nach:"
+
+#: include/stars-email-logs.php:42
+msgid "Search"
+msgstr "Suche nach"
+
+#: include/stars-smtp-accounts-list.php:12
+msgid "Main content"
+msgstr "Hauptkonten"
+
+#: include/stars-smtp-accounts-list.php:15
+msgid "SMTP Accounts"
+msgstr "SMTP Konten"
+
+#: include/stars-smtp-accounts-list.php:23
+msgid "Add New"
+msgstr "Neue hinzufügen"
+
+#: include/stars-smtp-accounts-list.php:24
+msgid "SMTP Accounts List Table"
+msgstr "SMTP Konten Liste Tabelle"
+
+#: include/stars-smtp-accounts-list.php:39
+msgid "Loading"
+msgstr "Laden"
+
+#: include/stars-test-email.php:8 include/stars-test-email.php:120
+msgid "Send"
+msgstr "Senden Sie"
+
+#: include/stars-test-email.php:30 include/stars-test-email.php:34
+msgid "Something went wrong. Please check email log to check what went wrong."
+msgstr ""
+"Etwas ging falsch. Bitte überprüfen Sie den E-Mail-Log, um zu überprüfen, "
+"was falsch ging."
+
+#: include/stars-test-email.php:30
+msgid "Error"
+msgstr "Fehler"
+
+#: include/stars-test-email.php:32
+msgid "Test Email Sent."
+msgstr "Test Email gesendet."
+
+#: include/stars-test-email.php:40
+msgid "Send Test Email"
+msgstr "Senden Sie Test Email"
+
+#: include/stars-test-email.php:58
+msgid "Email Address:"
+msgstr "E-Mail Adresse auf:"
+
+#: include/stars-test-email.php:68
+msgid "CC:"
+msgstr "Cc ist:"
+
+#: include/stars-test-email.php:74
+msgid "BCC:"
+msgstr "Die BCC:"
+
+#: include/stars-test-email.php:80
+msgid "Subject:"
+msgstr "Subjekte :"
+
+#: include/stars-test-email.php:86
+msgid "Body:"
+msgstr "Der Körper:"
+
+#. translators: %s is the site name (from get_bloginfo()).
+#: include/stars-test-email.php:97
+#, php-format
+msgid "This is a Test Email from %s - Stars PHP Mailer"
+msgstr "Dies ist eine Test-E-Mail von %s – Stars PHP Mailer"
+
+#: include/stars-test-email.php:113
+msgid "Add Attachments:"
+msgstr "Hinzufügen von Anhängen:"
+
+#: include/stars-test-email.php:132
+msgid "banner"
+msgstr "Banner"
+
+#: include/stars-test-email.php:133
+msgid "Stars SMTP Mailer Pro Version"
+msgstr "Stars Smtp Mailer Pro Version"
+
+#: include/stars-test-email.php:134
+msgid "SMTP Mailer Pro Features"
+msgstr "Smtp Mailer Pro Funktionen"
+
+#: include/stars-test-email.php:137
+msgid "Unlimited Emails Log"
+msgstr "Unbegrenzte E-Mails"
+
+#: include/stars-test-email.php:138
+msgid "Resend Emails"
+msgstr "E-Mails abgeben"
+
+#: include/stars-test-email.php:139
+msgid "Track Receipt ( Read / Unread Email )"
+msgstr "Lieferschein verfolgen (Gelesen / Ungelesene E-Mail)"
+
+#: include/stars-test-email.php:140
+msgid "Add Unlimited SMTP Accounts"
+msgstr "Unbegrenzte SMTP-Konten hinzufügen"
+
+#: include/stars-test-email.php:141
+msgid "Unlimited Active SMTP Accounts"
+msgstr "Unbegrenzte aktive SMTP-Konten"
+
+#: include/stars-test-email.php:142
+msgid "Email Tracking"
+msgstr "E-Mail-Verfolgung"
+
+#: include/stars-test-email.php:143
+msgid "Send emails via multiple accounts"
+msgstr "E-Mails über mehrere Konten senden"
+
+#: include/stars-test-email.php:144
+msgid "Advanced Sending Rules"
+msgstr "Erweiterte Versandregeln"
+
+#: include/stars-test-email.php:146
+msgid "Get Pro"
+msgstr "Erhalten Sie Pro"
+
+#. translators: %s: URL to the Stars SMTP Mailer accounts page.
+#: stars_smtp_mailer.php:181
+#, php-format
+msgid ""
+"No SMTP Accounts activated. Email wont be sent via <strong>Stars SMTP "
+"Mailer</strong>. Please add and/or activate account <a href=\"%s\">here</a>"
+msgstr ""
+"Keine Smtp-Konto ist aktiviert. E-Mail wird nicht über <strong>Stärken Smtp "
+"Mailer </strong>. Bitte fügen und/oder aktivieren Sie Ihr Konto <a "
+"href=\"%s\">Hier hier </a>"
