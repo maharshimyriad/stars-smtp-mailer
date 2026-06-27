@@ -24,10 +24,50 @@ $export_url = wp_nonce_url(
             <div id="icon-users" class="icon32"></div>
             <h1 class="wp-heading-inline"><?php echo esc_html__('Email Logs', 'stars-smtp-mailer'); ?></h1>
 
+            <?php if ( isset($_GET['stars_cleared']) ) : ?>
+                <div class="notice notice-success is-dismissible stars_save_msg">
+                    <p><?php esc_html_e('All email logs have been cleared.', 'stars-smtp-mailer'); ?></p>
+                </div>
+            <?php endif; ?>
+
             <a href="<?php echo esc_url($export_url); ?>" class="button stars-export-csv-btn" title="<?php esc_attr_e('Download all log entries as CSV', 'stars-smtp-mailer'); ?>">
                 <span class="dashicons dashicons-download" style="margin-top:3px;"></span>
                 <?php esc_html_e('Export CSV', 'stars-smtp-mailer'); ?>
             </a>
+
+            <?php
+            // Clear all logs — nonce-protected, capability-checked
+            $clear_url = wp_nonce_url(
+                admin_url('admin.php?page=stars-smtpm-email-log&stars_clear_logs=1'),
+                'stars_smtpm_clear_logs'
+            );
+            ?>
+            <a href="<?php echo esc_url($clear_url); ?>"
+               class="button stars-clear-logs-btn"
+               id="stars-clear-logs"
+               title="<?php esc_attr_e('Delete all email log entries', 'stars-smtp-mailer'); ?>">
+                <span class="dashicons dashicons-trash" style="margin-top:3px;"></span>
+                <?php esc_html_e('Clear Logs', 'stars-smtp-mailer'); ?>
+            </a>
+
+            <!-- Status + Type filter bar -->
+            <form method="GET" action="<?php echo esc_url(admin_url('admin.php')); ?>" class="stars-log-filter-form">
+                <input type="hidden" name="page" value="stars-smtpm-email-log">
+                <select name="filter_status" class="stars-filter-select">
+                    <option value=""><?php esc_html_e('All statuses', 'stars-smtp-mailer'); ?></option>
+                    <option value="Sent"   <?php selected(isset($_GET['filter_status']) ? sanitize_text_field($_GET['filter_status']) : '', 'Sent'); ?>><?php esc_html_e('Accepted', 'stars-smtp-mailer'); ?></option>
+                    <option value="Unsent" <?php selected(isset($_GET['filter_status']) ? sanitize_text_field($_GET['filter_status']) : '', 'Unsent'); ?>><?php esc_html_e('Failed', 'stars-smtp-mailer'); ?></option>
+                </select>
+                <select name="filter_type" class="stars-filter-select">
+                    <option value=""><?php esc_html_e('All types', 'stars-smtp-mailer'); ?></option>
+                    <option value="test"    <?php selected(isset($_GET['filter_type']) ? sanitize_text_field($_GET['filter_type']) : '', 'test'); ?>><?php esc_html_e('Test emails', 'stars-smtp-mailer'); ?></option>
+                    <option value="general" <?php selected(isset($_GET['filter_type']) ? sanitize_text_field($_GET['filter_type']) : '', 'general'); ?>><?php esc_html_e('General emails', 'stars-smtp-mailer'); ?></option>
+                </select>
+                <button type="submit" class="button"><?php esc_html_e('Filter', 'stars-smtp-mailer'); ?></button>
+                <?php if (!empty($_GET['filter_status']) || !empty($_GET['filter_type'])) : ?>
+                    <a href="<?php echo esc_url(admin_url('admin.php?page=stars-smtpm-email-log')); ?>" class="button"><?php esc_html_e('Reset', 'stars-smtp-mailer'); ?></a>
+                <?php endif; ?>
+            </form>
 
             <form action="<?php echo esc_url(admin_url('/admin.php')); ?>" method="GET"
                 class="stars-float-right star-margin-top-18">
@@ -146,6 +186,13 @@ $export_url = wp_nonce_url(
     <?php } ?>
 
     jQuery(document).ready(function ($) {
+        // Clear logs confirmation
+        $('#stars-clear-logs').on('click', function (e) {
+            if (!confirm('<?php echo esc_js(__('Are you sure you want to delete ALL email logs? This cannot be undone.', 'stars-smtp-mailer')); ?>')) {
+                e.preventDefault();
+            }
+        });
+
         // Date pickers
         $("#sdate").datepicker({
             dateFormat: "dd/mm/yy", changeMonth: true, changeYear: true,

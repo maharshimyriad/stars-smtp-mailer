@@ -1056,3 +1056,132 @@ input[type="checkbox"] {
 	background: var(--stars-primary-light) !important;
 }
 .stars-dash-action-btn svg { flex-shrink: 0; }
+
+/* ============================================================
+   Feature 1 — Provider preset buttons
+   ============================================================ */
+.stars-presets-row {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 14px 0 6px;
+	flex-wrap: wrap;
+	border-bottom: 1px solid var(--stars-border-light);
+	margin-bottom: 4px;
+}
+.stars-presets-label {
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--stars-text-muted);
+	white-space: nowrap;
+	flex-shrink: 0;
+}
+.stars-presets {
+	display: flex;
+	gap: 7px;
+	flex-wrap: wrap;
+}
+.stars-preset-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 5px 13px;
+	font-size: 12.5px;
+	font-weight: 500;
+	border: 1.5px solid var(--stars-border);
+	border-radius: 20px;
+	background: #fafafa;
+	cursor: pointer;
+	color: var(--stars-label);
+	transition: all var(--stars-transition);
+	line-height: 1.4;
+}
+.stars-preset-btn:hover {
+	border-color: var(--stars-primary);
+	background: var(--stars-primary-light);
+	color: var(--stars-primary);
+}
+.stars-preset-btn--active {
+	border-color: var(--stars-primary) !important;
+	background: var(--stars-primary-light) !important;
+	color: var(--stars-primary) !important;
+	font-weight: 700 !important;
+}
+.stars-preset-btn svg { flex-shrink: 0; }
+
+/* ============================================================
+   Feature 2 — Account health indicator
+   ============================================================ */
+.stars-health-cell {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+.stars-health-dot {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	flex-shrink: 0;
+}
+.stars-health-dot--ok      { background: var(--stars-success); box-shadow: 0 0 0 3px rgba(0,163,42,.15); }
+.stars-health-dot--warn    { background: var(--stars-warning);  box-shadow: 0 0 0 3px rgba(219,166,23,.15); }
+.stars-health-dot--fail    { background: var(--stars-danger);   box-shadow: 0 0 0 3px rgba(214,54,56,.15); }
+.stars-health-dot--unknown { background: #c3c4c7;               box-shadow: 0 0 0 3px rgba(0,0,0,.06); }
+
+.stars-health-label         { font-size: 12px; font-weight: 600; color: var(--stars-text-muted); }
+.stars-health-label--ok     { color: #007017; }
+.stars-health-label--warn   { color: #7a5100; }
+.stars-health-label--fail   { color: var(--stars-danger); }
+
+/* ============================================================
+   Feature 3 — Log filter bar
+   ============================================================ */
+.stars-log-filter-form {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	margin: 8px 0 4px;
+	flex-wrap: wrap;
+	float: left;
+	clear: left;
+	width: 100%;
+}
+.stars-filter-select {
+	height: 30px;
+	font-size: 13px;
+	border: 1px solid var(--stars-border);
+	border-radius: var(--stars-radius-sm);
+	padding: 0 8px;
+	color: var(--stars-label);
+	background: #fff;
+	cursor: pointer;
+}
+.stars-filter-select:focus {
+	border-color: var(--stars-primary);
+	outline: none;
+	box-shadow: var(--stars-shadow-focus);
+}
+
+/* ============================================================
+   Feature 5 — Clear logs button
+   ============================================================ */
+.stars-clear-logs-btn {
+	display: inline-flex !important;
+	align-items: center;
+	gap: 5px;
+	margin-left: 6px !important;
+	font-size: 13px !important;
+	color: var(--stars-danger) !important;
+	border-color: #f5aeae !important;
+	background: var(--stars-danger-light) !important;
+}
+.stars-clear-logs-btn:hover {
+	background: #fbd5d5 !important;
+	border-color: var(--stars-danger) !important;
+}
+.stars-clear-logs-btn .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}

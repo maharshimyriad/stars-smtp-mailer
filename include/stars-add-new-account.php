@@ -92,6 +92,38 @@ $title = $is_edit
                      <!-- ==========================================
                           Section 1: Server Connection
                      =========================================== -->
+                     <?php if (!$is_edit) : ?>
+                     <!-- Provider presets -->
+                     <div class="stars-presets-row">
+                        <span class="stars-presets-label"><?php esc_html_e('Quick setup:', 'stars-smtp-mailer'); ?></span>
+                        <div class="stars-presets">
+                           <button type="button" class="stars-preset-btn" data-host="smtp.gmail.com"      data-port="587" data-enc="tls" data-auth="1">
+                              <svg viewBox="0 0 24 24" width="14" height="14"><path fill="#EA4335" d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
+                              Gmail
+                           </button>
+                           <button type="button" class="stars-preset-btn" data-host="smtp-mail.outlook.com" data-port="587" data-enc="tls" data-auth="1">
+                              <svg viewBox="0 0 24 24" width="14" height="14"><path fill="#0078D4" d="M24 7.387v9.24a1.62 1.62 0 0 1-.757 1.386L12.952 24l-.002-.003L2.757 18.01A1.62 1.62 0 0 1 2 16.625V7.387a1.62 1.62 0 0 1 .757-1.385l9.241-5.977a1.62 1.62 0 0 1 1.744 0l9.5 6.143A1.619 1.619 0 0 1 24 7.387z"/></svg>
+                              Outlook
+                           </button>
+                           <button type="button" class="stars-preset-btn" data-host="smtp.hostinger.com" data-port="465" data-enc="ssl" data-auth="1">
+                              <svg viewBox="0 0 24 24" width="14" height="14"><path fill="#FF6C00" d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0z"/></svg>
+                              Hostinger
+                           </button>
+                           <button type="button" class="stars-preset-btn" data-host="smtp.mail.yahoo.com" data-port="587" data-enc="tls" data-auth="1">
+                              <svg viewBox="0 0 24 24" width="14" height="14"><path fill="#6001D2" d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0z"/></svg>
+                              Yahoo
+                           </button>
+                           <button type="button" class="stars-preset-btn" data-host="smtp.sendgrid.net" data-port="587" data-enc="tls" data-auth="1">
+                              <svg viewBox="0 0 24 24" width="14" height="14"><path fill="#1A82E2" d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0z"/></svg>
+                              SendGrid
+                           </button>
+                           <button type="button" class="stars-preset-btn" data-host="email-smtp.us-east-1.amazonaws.com" data-port="587" data-enc="tls" data-auth="1">
+                              <svg viewBox="0 0 24 24" width="14" height="14"><path fill="#FF9900" d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0z"/></svg>
+                              Amazon SES
+                           </button>
+                        </div>
+                     </div>
+                     <?php endif; ?>
                      <div class="stars-form-section-title">
                         <?php esc_html_e('Server Connection', 'stars-smtp-mailer'); ?>
                      </div>
@@ -403,7 +435,38 @@ document.title = '<?php echo esc_js($title); ?>';
    });
 })();
 
-/* Test Connection button */
+/* Provider presets */
+(function () {
+   document.querySelectorAll('.stars-preset-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+         var host = btn.dataset.host;
+         var port = btn.dataset.port;
+         var enc  = btn.dataset.enc;
+         var auth = btn.dataset.auth;
+
+         document.getElementById('smtp_host').value = host;
+         document.getElementById('smtp_port').value = port;
+
+         // Set encryption radio
+         var encRadio = document.querySelector('input[name="encryption"][value="' + enc + '"]');
+         if (encRadio) {
+            encRadio.checked = true;
+            encRadio.dispatchEvent(new Event('change'));
+         }
+         // Set auth radio
+         var authRadio = document.querySelector('input[name="auth"][value="' + auth + '"]');
+         if (authRadio) authRadio.checked = true;
+
+         // Highlight active preset
+         document.querySelectorAll('.stars-preset-btn').forEach(function (b) { b.classList.remove('stars-preset-btn--active'); });
+         btn.classList.add('stars-preset-btn--active');
+
+         // Scroll to username field
+         var un = document.getElementById('username');
+         if (un) un.focus();
+      });
+   });
+})();
 (function () {
    var btn = document.getElementById('stars-test-connection');
    if (!btn) return;

@@ -122,7 +122,6 @@ class STARS_SMTPM_Show_List_Table extends WP_List_Table
                 $status = ($data[$_j]['status'] == 0 ? 'Activate' : 'Deactivate');
                 $class  = ($data[$_j]['status'] == 0 ? 'stars-btn-green' : 'stars-btn-red');
                 unset($data[$_j]['status']);
-                // Fix: escape all DB-sourced values injected into HTML attributes/content
                 $data[$_j]['status'] = '<button type="button" id="' . esc_attr($data[$_j]['id']) . '" class="smtp-activation button stars-btn-width ' . esc_attr(strtolower($status)) . ' ' . esc_attr($class) . ' ">' . esc_html($status) . '</button>';
                 $auth = ($data[$_j]['auth'] == 0 ? 'False' : 'True');
                 unset($data[$_j]['auth']);
@@ -130,6 +129,28 @@ class STARS_SMTPM_Show_List_Table extends WP_List_Table
                 $encryption              = strtoupper($data[$_j]['encryption']);
                 unset($data[$_j]['encryption']);
                 $data[$_j]['encryption'] = esc_html($encryption);
+
+                // Health indicator — based on last log entry for this account's from_email
+                global $wpdb;
+                $acc_from = $data[$_j]['from_email'];
+                $last_log = $wpdb->get_row( $wpdb->prepare(
+                    "SELECT status, mail_date FROM " . STARS_SMTPM_EMAILS_LOG .
+                    " WHERE from_email = %s ORDER BY log_id DESC LIMIT 1",
+                    $acc_from
+                ) );
+                if ( ! $last_log ) {
+                    $health = '<span class="stars-health-dot stars-health-dot--unknown" title="' . esc_attr__('Never tested', 'stars-smtp-mailer') . '"></span><span class="stars-health-label">' . esc_html__('No data', 'stars-smtp-mailer') . '</span>';
+                } else {
+                    $hours_ago = ( time() - strtotime( $last_log->mail_date ) ) / 3600;
+                    if ( $last_log->status === 'Sent' && $hours_ago <= 24 ) {
+                        $health = '<span class="stars-health-dot stars-health-dot--ok" title="' . esc_attr__('Sent successfully in last 24h', 'stars-smtp-mailer') . '"></span><span class="stars-health-label stars-health-label--ok">' . esc_html__('Healthy', 'stars-smtp-mailer') . '</span>';
+                    } elseif ( $last_log->status === 'Sent' ) {
+                        $health = '<span class="stars-health-dot stars-health-dot--warn" title="' . esc_attr__('Last send was successful but more than 24h ago', 'stars-smtp-mailer') . '"></span><span class="stars-health-label stars-health-label--warn">' . esc_html__('Idle', 'stars-smtp-mailer') . '</span>';
+                    } else {
+                        $health = '<span class="stars-health-dot stars-health-dot--fail" title="' . esc_attr__('Last send failed', 'stars-smtp-mailer') . '"></span><span class="stars-health-label stars-health-label--fail">' . esc_html__('Failed', 'stars-smtp-mailer') . '</span>';
+                    }
+                }
+                $data[$_j]['health'] = '<div class="stars-health-cell">' . $health . '</div>';
             } else if ($this->table_name == STARS_SMTPM_EMAILS_LOG) {
                 $raw_status  = $data[$_j]['status'];
                 $debug_op    = $data[$_j]['debug_op'];
@@ -252,6 +273,8 @@ class STARS_SMTPM_Show_List_Table extends WP_List_Table
                     $columns[$value['Field']] = $label;
                 }
             }
+            // Append health column after status
+            $columns['health'] = __('Health', 'stars-smtp-mailer');
         } else if ($this->table_name == STARS_SMTPM_EMAILS_LOG) {
             $columns['sub'] = __('Title', 'stars-smtp-mailer');
             $columns['from'] = __('From', 'stars-smtp-mailer');
@@ -298,6 +321,13 @@ class STARS_SMTPM_Show_List_Table extends WP_List_Table
     {
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- value is escaped in prepare_items()
         return $item['status'];
+    }
+
+    /** Health column — pre-built HTML with colored dot */
+    public function column_health($item)
+    {
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- value is escaped in prepare_items()
+        return isset($item['health']) ? $item['health'] : '';
     }
 
     /**
@@ -577,30 +607,41 @@ class STARS_SMTPM_Show_List_Table extends WP_List_Table
             status LIKE %s OR
             mail_type LIKE %s
             LIMIT 200",
-                    $search,
-                    $search,
-                    $search,
-                    $search,
-                    $search,
-                    $search,
-                    $search,
-                    $search,
-                    $search,
-                    $search
+                    $search, $search, $search, $search, $search,
+                    $search, $search, $search, $search, $search
                 ),
                 ARRAY_A
             );
         } else {
-            $limit = ($this->table_name == STARS_SMTPM_SMTP_SETTINGS ? 3 : 200);
-            $table_name = $this->table_name;
+            // Status / type filter from dropdown
+            $filter_status = isset($_GET['filter_status']) ? sanitize_text_field($_GET['filter_status']) : '';
+            $filter_type   = isset($_GET['filter_type'])   ? sanitize_text_field($_GET['filter_type'])   : '';
 
-            $cur_form_res = $wpdb->get_results(
-                $wpdb->prepare(
-                    "SELECT * FROM {$table_name} LIMIT %d",
-                    $limit
-                ),
-                ARRAY_A
-            );
+            if ( $this->table_name == STARS_SMTPM_EMAILS_LOG && ( $filter_status !== '' || $filter_type !== '' ) ) {
+                $table_name = $this->table_name;
+                $where      = array();
+                $values     = array();
+
+                if ( $filter_status !== '' ) {
+                    $where[]  = 'status = %s';
+                    $values[] = $filter_status;
+                }
+                if ( $filter_type !== '' ) {
+                    $where[]  = 'mail_type = %s';
+                    $values[] = $filter_type;
+                }
+
+                $sql = "SELECT * FROM {$table_name} WHERE " . implode(' AND ', $where) . ' LIMIT 200';
+                // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+                $cur_form_res = $wpdb->get_results( $wpdb->prepare( $sql, $values ), ARRAY_A );
+            } else {
+                $limit        = ( $this->table_name == STARS_SMTPM_SMTP_SETTINGS ? 3 : 200 );
+                $table_name   = $this->table_name;
+                $cur_form_res = $wpdb->get_results(
+                    $wpdb->prepare( "SELECT * FROM {$table_name} LIMIT %d", $limit ),
+                    ARRAY_A
+                );
+            }
         }
         return ($cur_form_res ? $cur_form_res : array());
     }

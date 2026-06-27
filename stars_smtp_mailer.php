@@ -342,22 +342,34 @@ function stars_smtpm_export_csv()
     header( 'Expires: 0' );
 
     $out = fopen( 'php://output', 'w' );
-    // BOM for Excel UTF-8 compatibility
     fputs( $out, "\xEF\xBB\xBF" );
     fputcsv( $out, array( 'ID', 'From Name', 'From Email', 'To', 'Subject', 'Status', 'Type', 'Date' ) );
     foreach ( $rows as $row ) {
         fputcsv( $out, array(
-            $row['log_id'],
-            $row['from_name'],
-            $row['from_email'],
-            $row['email_id'],
-            $row['sub'],
-            $row['status'],
-            $row['mail_type'],
-            $row['mail_date'],
+            $row['log_id'], $row['from_name'], $row['from_email'],
+            $row['email_id'], $row['sub'], $row['status'], $row['mail_type'], $row['mail_date'],
         ) );
     }
     fclose( $out );
+    exit;
+}
+
+/**
+ * Clear all logs handler.
+ */
+add_action('admin_init', 'stars_smtpm_clear_logs');
+function stars_smtpm_clear_logs()
+{
+    if ( ! isset( $_GET['page'], $_GET['stars_clear_logs'] ) ) return;
+    if ( $_GET['page'] !== 'stars-smtpm-email-log' ) return;
+    if ( ! current_user_can('manage_options') ) return;
+    if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_key( $_GET['_wpnonce'] ), 'stars_smtpm_clear_logs' ) ) {
+        wp_die( esc_html__( 'Security check failed.', 'stars-smtp-mailer' ) );
+    }
+    global $wpdb;
+    $wpdb->query( "TRUNCATE TABLE " . STARS_SMTPM_EMAILS_LOG );
+    delete_transient('stars_smtpm_log_cap_warning');
+    wp_redirect( admin_url('admin.php?page=stars-smtpm-email-log&stars_cleared=1') );
     exit;
 }
 
