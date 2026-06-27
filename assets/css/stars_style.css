@@ -624,7 +624,7 @@ input[type="checkbox"] {
 /* ============================================================
    Pagination nav fix
    ============================================================ */
-.tablenav { float: left; width: 100%; }
+.tablenav { float: left; width: 100%; display: none; }
 .tablenav-pages-navspan {
 	height: 26px;
 	line-height: 24px;
