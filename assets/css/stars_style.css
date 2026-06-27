@@ -1185,3 +1185,13 @@ input[type="checkbox"] {
 	width: 16px;
 	height: 16px;
 }
+
+.stars-filter_container{
+	display: flex;
+	gap: 12px;
+	align-items: center;
+}
+
+.stars-filter_container p.search-box{
+	flex-wrap: nowrap;
+}

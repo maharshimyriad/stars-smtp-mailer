@@ -29,7 +29,7 @@ $export_url = wp_nonce_url(
                     <p><?php esc_html_e('All email logs have been cleared.', 'stars-smtp-mailer'); ?></p>
                 </div>
             <?php endif; ?>
-            <div>
+            <div class="stars-filter_container">
                 <a href="<?php echo esc_url($export_url); ?>" class="button stars-export-csv-btn"
                     title="<?php esc_attr_e('Download all log entries as CSV', 'stars-smtp-mailer'); ?>">
                     <span class="dashicons dashicons-download" style="margin-top:3px; line-height:1;"></span>
