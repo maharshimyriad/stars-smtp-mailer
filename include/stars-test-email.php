@@ -101,7 +101,7 @@ if (
       <?php endif; ?>
 
       <!-- Info banner: always visible, explains SMTP delivery reality -->
-      <div class="notice notice-info stars-test-info-banner" style="margin-bottom:16px;">
+      <div class="notice notice-info stars-test-info-banner" style="margin-bottom:16px; margin-left:0;">
          <p>
             <span class="dashicons dashicons-email-alt" style="font-size:15px;vertical-align:middle;"></span>
             <strong><?php esc_html_e('How test sending works:', 'stars-smtp-mailer'); ?></strong>
