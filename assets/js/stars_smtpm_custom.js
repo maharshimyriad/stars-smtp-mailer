@@ -143,10 +143,7 @@ jQuery(document).ready(function () {
   });
 });
 function SetEmailBody() {
-  if (jQuery("#email_content").css("display") == "none")
-    jQuery("#email_content").val(
-      jQuery("#email_content_ifr").contents().find("body").text(),
-    );
+  // Body is now a plain textarea — nothing extra needed
   return true;
 }
 function getParameterByName(name, url) {

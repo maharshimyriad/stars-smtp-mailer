@@ -309,6 +309,70 @@ function stars_smtpm_email_log()
 }
 
 /**
+ * Show a notice on the email log page when row count >= 180.
+ */
+add_action('all_admin_notices', 'stars_smtpm_log_cap_notice');
+function stars_smtpm_log_cap_notice()
+{
+    if ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'stars-smtpm-email-log' ) return;
+    $count = get_transient('stars_smtpm_log_cap_warning');
+    if ( $count === false ) return;
+    printf(
+        '<div class="notice notice-warning is-dismissible"><p><strong>%s</strong> %s</p></div>',
+        esc_html__( 'Stars SMTP Mailer:', 'stars-smtp-mailer' ),
+        sprintf(
+            /* translators: 1: current row count, 2: max rows */
+            esc_html__( 'Email log is at %1$d / %2$d entries. Oldest logs will be deleted automatically. Export or clear old entries to avoid data loss.', 'stars-smtp-mailer' ),
+            (int) $count,
+            200
+        )
+    );
+}
+
+/**
+ * CSV export handler — runs on admin_init before any output.
+ */
+add_action('admin_init', 'stars_smtpm_export_csv');
+function stars_smtpm_export_csv()
+{
+    if ( ! isset( $_GET['page'], $_GET['stars_export_csv'] ) ) return;
+    if ( $_GET['page'] !== 'stars-smtpm-email-log' ) return;
+    if ( ! current_user_can('manage_options') ) return;
+    if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_key( $_GET['_wpnonce'] ), 'stars_smtpm_export_csv' ) ) {
+        wp_die( esc_html__( 'Security check failed.', 'stars-smtp-mailer' ) );
+    }
+
+    global $wpdb;
+    $table  = STARS_SMTPM_EMAILS_LOG;
+    $rows   = $wpdb->get_results( "SELECT log_id, from_name, from_email, email_id, sub, status, mail_type, mail_date FROM {$table} ORDER BY log_id DESC LIMIT 200", ARRAY_A );
+
+    $filename = 'stars-smtp-email-log-' . gmdate('Y-m-d') . '.csv';
+    header( 'Content-Type: text/csv; charset=UTF-8' );
+    header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
+    header( 'Pragma: no-cache' );
+    header( 'Expires: 0' );
+
+    $out = fopen( 'php://output', 'w' );
+    // BOM for Excel UTF-8 compatibility
+    fputs( $out, "\xEF\xBB\xBF" );
+    fputcsv( $out, array( 'ID', 'From Name', 'From Email', 'To', 'Subject', 'Status', 'Type', 'Date' ) );
+    foreach ( $rows as $row ) {
+        fputcsv( $out, array(
+            $row['log_id'],
+            $row['from_name'],
+            $row['from_email'],
+            $row['email_id'],
+            $row['sub'],
+            $row['status'],
+            $row['mail_type'],
+            $row['mail_date'],
+        ) );
+    }
+    fclose( $out );
+    exit;
+}
+
+/**
  * Process the Add/Edit account form on admin_init — before any output —
  * so wp_redirect() can fire without "headers already sent" warnings.
  */
@@ -433,9 +497,7 @@ function stars_smtpm_mailer_assets($hook)
         wp_enqueue_script('jquery-ui-dialog');
 
         wp_enqueue_style("stars_jquery_ui_css", STARS_SMTPM_PLUGIN_URL . '/' . basename(dirname(__FILE__)) . '/assets/css/jquery-ui.css');
-
-        wp_enqueue_style('thickbox');
-        wp_enqueue_script('thickbox');
+        // thickbox removed — email body preview now uses a sandboxed iframe modal
     }
 }
 
@@ -487,38 +549,132 @@ function stars_smtpm_dashboard_widget()
 {
     global $wpdb;
 
-    $email_logs = $wpdb->get_results("SELECT mail_date, status FROM " . STARS_SMTPM_EMAILS_LOG, ARRAY_A);
-    $stats = array("today_emails" => 0, "unsent" => 0, "sent" => 0);
+    // Fetch last 7 days of logs
+    $rows = $wpdb->get_results(
+        "SELECT DATE(mail_date) as d, status FROM " . STARS_SMTPM_EMAILS_LOG .
+        " WHERE mail_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)",
+        ARRAY_A
+    );
 
-    $today = gmdate("Y-m-d");
+    $today        = gmdate('Y-m-d');
+    $total_sent   = 0;
+    $total_unsent = 0;
+    $today_count  = 0;
 
-    foreach ($email_logs as $el_data) {
-        if (gmdate("Y-m-d", strtotime($el_data['mail_date'])) === $today)
-            $stats['today_emails']++;
-
-        if ($el_data['status'] === "Sent")
-            $stats['sent']++;
-        else if ($el_data['status'] === "Unsent")
-            $stats['unsent']++;
+    // Build per-day buckets for the chart (last 7 days)
+    $days        = array();
+    $day_sent    = array();
+    $day_unsent  = array();
+    for ( $i = 6; $i >= 0; $i-- ) {
+        $d              = gmdate( 'Y-m-d', strtotime( "-{$i} days" ) );
+        $days[]         = gmdate( 'D', strtotime( $d ) ); // Mon, Tue …
+        $day_sent[$d]   = 0;
+        $day_unsent[$d] = 0;
     }
 
-    $active_account = $acc_id = "";
-    $stars_active_account = stars_smtpm_get_smtp_account();
-
-    if ($stars_active_account) {
-        $active_account = esc_html($stars_active_account['from_email']);
-        $acc_id = '<a class="button-link community-events-toggle-location" title="Manage Account" aria-expanded="false" aria-hidden="false" href="' . esc_url(admin_url("/admin.php?page=stars-smtpm-new-account&action=edit&id=" . intval($stars_active_account['id']))) . '"><span class="dashicons dashicons-edit"></span></a>';
+    foreach ( $rows as $r ) {
+        $d = $r['d'];
+        if ( $r['status'] === 'Sent' ) {
+            $total_sent++;
+            if ( isset( $day_sent[$d] ) ) $day_sent[$d]++;
+        } else {
+            $total_unsent++;
+            if ( isset( $day_unsent[$d] ) ) $day_unsent[$d]++;
+        }
+        if ( $d === $today ) $today_count++;
     }
 
-    $stars_statistics  = '<table border="1" style="border-collapse:collapse;width:100%;" cellpadding="7">';
-    $stars_statistics .= '<tr><td>' . esc_html__('Active SMTP Account', 'stars-smtp-mailer') . ' : </td><td>' . ($active_account !== '' || $acc_id !== '' ? esc_html($active_account) . ' ' . $acc_id : '-') . '</td></tr>';
-    $stars_statistics .= '<tr><td>' . esc_html__("Today's Emails", 'stars-smtp-mailer') . ' : </td><td>' . intval($stats['today_emails']) . '</td></tr>';
-    $stars_statistics .= '<tr><td>' . esc_html__('Total Sent Emails', 'stars-smtp-mailer') . ' : </td><td>' . intval($stats['sent']) . '</td></tr>';
-    $stars_statistics .= '<tr><td>' . esc_html__('Total Unsent Emails', 'stars-smtp-mailer') . ' : </td><td>' . intval($stats['unsent']) . '</td></tr>';
-    $stars_statistics .= '</table>';
+    $sent_vals   = array_values( $day_sent );
+    $unsent_vals = array_values( $day_unsent );
 
-    // $acc_id contains a safe, pre-built anchor with esc_url/intval — output is intentional HTML
-    echo $stars_statistics; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    // Active account
+    $active_account = '';
+    $acc_link       = '';
+    $smtp_acc       = stars_smtpm_get_smtp_account();
+    if ( $smtp_acc ) {
+        $active_account = esc_html( $smtp_acc['from_email'] );
+        $acc_link       = '<a href="' . esc_url( admin_url( 'admin.php?page=stars-smtpm-new-account&action=edit&id=' . intval( $smtp_acc['id'] ) ) ) . '" title="Edit account"><span class="dashicons dashicons-edit" style="font-size:14px;vertical-align:middle;"></span></a>';
+    }
+    ?>
+    <style>
+    .stars-widget-stats{display:flex;gap:12px;margin:0 0 14px;flex-wrap:wrap}
+    .stars-widget-stat{flex:1;min-width:80px;background:#f6f7f7;border-radius:6px;padding:10px 12px;text-align:center;border:1px solid #dcdcde}
+    .stars-widget-stat strong{display:block;font-size:22px;line-height:1.2;color:#1d2327}
+    .stars-widget-stat span{font-size:11px;color:#646970;display:block;margin-top:2px}
+    .stars-widget-account{font-size:12px;color:#646970;margin-bottom:10px;border-top:1px solid #f0f0f1;padding-top:8px}
+    </style>
+
+    <div class="stars-widget-stats">
+        <div class="stars-widget-stat">
+            <strong><?php echo intval( $today_count ); ?></strong>
+            <span><?php esc_html_e( "Today", 'stars-smtp-mailer' ); ?></span>
+        </div>
+        <div class="stars-widget-stat" style="border-color:#a7e3a5">
+            <strong style="color:#00a32a"><?php echo intval( $total_sent ); ?></strong>
+            <span><?php esc_html_e( "Accepted (7d)", 'stars-smtp-mailer' ); ?></span>
+        </div>
+        <div class="stars-widget-stat" style="border-color:#f5aeae">
+            <strong style="color:#d63638"><?php echo intval( $total_unsent ); ?></strong>
+            <span><?php esc_html_e( "Failed (7d)", 'stars-smtp-mailer' ); ?></span>
+        </div>
+    </div>
+
+    <canvas id="stars-widget-chart" height="90"></canvas>
+
+    <?php if ( $active_account ) : ?>
+    <div class="stars-widget-account">
+        <?php esc_html_e( 'Active account:', 'stars-smtp-mailer' ); ?>
+        <strong><?php echo esc_html( $active_account ); ?></strong> <?php echo $acc_link; // pre-built safe HTML ?>
+    </div>
+    <?php endif; ?>
+
+    <script>
+    (function(){
+        var load = function(){
+            if(typeof Chart === 'undefined'){
+                var s = document.createElement('script');
+                s.src = 'https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js';
+                s.onload = draw;
+                document.head.appendChild(s);
+            } else { draw(); }
+        };
+        function draw(){
+            var ctx = document.getElementById('stars-widget-chart');
+            if(!ctx) return;
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: <?php echo wp_json_encode( $days ); ?>,
+                    datasets: [
+                        {
+                            label: '<?php echo esc_js( __('Accepted', 'stars-smtp-mailer') ); ?>',
+                            data: <?php echo wp_json_encode( $sent_vals ); ?>,
+                            backgroundColor: 'rgba(0,163,42,0.7)',
+                            borderRadius: 3
+                        },
+                        {
+                            label: '<?php echo esc_js( __('Failed', 'stars-smtp-mailer') ); ?>',
+                            data: <?php echo wp_json_encode( $unsent_vals ); ?>,
+                            backgroundColor: 'rgba(214,54,56,0.7)',
+                            borderRadius: 3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+                        y: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 11 } }, grid: { color: '#f0f0f1' } }
+                    }
+                }
+            });
+        }
+        if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', load); }
+        else { load(); }
+    })();
+    </script>
+    <?php
 }
 
 

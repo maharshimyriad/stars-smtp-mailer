@@ -55,6 +55,11 @@ class STARS_SMTPM_Show_List_Table extends WP_List_Table
                         esc_url(admin_url('admin.php?page=stars-smtpm-new-account&action=edit&id=' . intval($item[$this->unique_id]))),
                         esc_html__('Edit', 'stars-smtp-mailer')
                     ),
+                    'test'   => sprintf(
+                        '<a href="%s">%s</a>',
+                        esc_url(admin_url('admin.php?page=stars-smtpm-test-mail&id=' . intval($item[$this->unique_id]))),
+                        esc_html__('Send Test', 'stars-smtp-mailer')
+                    ),
                     'delete' => sprintf(
                         '<a href="%s" class="confirm-delete" data-value="account" data-id="%s">%s</a>',
                         esc_url($complete_url),
@@ -126,7 +131,11 @@ class STARS_SMTPM_Show_List_Table extends WP_List_Table
                 unset($data[$_j]['encryption']);
                 $data[$_j]['encryption'] = esc_html($encryption);
             } else if ($this->table_name == STARS_SMTPM_EMAILS_LOG) {
-                $status = '<p class="email-status"><span class="' . esc_attr( strtolower( $data[$_j]['status'] ) ) . '">' . esc_html( ucwords( strtolower( $data[$_j]['status'] ) ) ) . '</span>' . ( $data[$_j]['status'] === 'Unsent' ? '&nbsp;&nbsp;&nbsp;<span class="tooltip-toggle" title="<p>' . esc_attr( $data[$_j]['debug_op'] ) . '</p>">!</span>' : '' ) . '</p>';
+                $status = '<p class="email-status"><span class="' . esc_attr( strtolower( $data[$_j]['status'] ) ) . '">'
+                    . esc_html( $data[$_j]['status'] === 'Sent' ? __('Accepted', 'stars-smtp-mailer') : ucwords( strtolower( $data[$_j]['status'] ) ) )
+                    . '</span>'
+                    . ( $data[$_j]['status'] === 'Unsent' ? '&nbsp;&nbsp;&nbsp;<span class="tooltip-toggle" title="<p>' . esc_attr( $data[$_j]['debug_op'] ) . '</p>">!</span>' : '' )
+                    . '</p>';
                 $body = $data[$_j]['mail_body'];
                 $from = $data[$_j]['from_email'];
                 $to   = $data[$_j]['email_id'];

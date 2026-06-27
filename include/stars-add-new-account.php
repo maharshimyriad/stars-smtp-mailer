@@ -111,6 +111,9 @@ $title = $is_edit
                               <?php esc_html_e('The hostname of your SMTP server.', 'stars-smtp-mailer'); ?>
                            </p>
                            <span class="check_error none"></span>
+                           <button type="button" id="stars-test-connection" class="button stars-test-conn-btn">
+                              <?php esc_html_e('Test Connection', 'stars-smtp-mailer'); ?>
+                           </button>
                         </div>
                      </div>
 
@@ -400,6 +403,62 @@ document.title = '<?php echo esc_js($title); ?>';
          input.type = isHidden ? 'text' : 'password';
          btn.querySelector('.pw-icon-show').style.display = isHidden ? 'none' : '';
          btn.querySelector('.pw-icon-hide').style.display = isHidden ? '' : 'none';
+      });
+   });
+})();
+
+/* Test Connection button */
+(function () {
+   var btn = document.getElementById('stars-test-connection');
+   if (!btn) return;
+   btn.addEventListener('click', function () {
+      var host = document.getElementById('smtp_host').value.trim();
+      var port = document.getElementById('smtp_port').value.trim();
+      var errEl = document.querySelector('.check_error');
+      if (!host || !port) {
+         errEl.textContent = '<?php echo esc_js(__('Enter SMTP Host and Port first.', 'stars-smtp-mailer')); ?>';
+         errEl.style.color = 'red';
+         errEl.classList.remove('none');
+         return;
+      }
+      btn.disabled = true;
+      btn.textContent = '<?php echo esc_js(__('Testing…', 'stars-smtp-mailer')); ?>';
+      errEl.classList.add('none');
+      jQuery.ajax({
+         type: 'POST',
+         url: ajaxurl,
+         data: {
+            check_host: host,
+            check_port: port,
+            action: 'stars_smtpm_check_host_server',
+            nonce: typeof starsSmtpNotify !== 'undefined' ? starsSmtpNotify.check_host_nonce : ''
+         },
+         success: function (response) {
+            try { var data = typeof response === 'string' ? JSON.parse(response) : response; } catch(e) { var data = {}; }
+            btn.disabled = false;
+            btn.textContent = '<?php echo esc_js(__('Test Connection', 'stars-smtp-mailer')); ?>';
+            if (data.data && data.data.error) {
+               errEl.textContent = data.data.error;
+               errEl.style.color = 'red';
+            } else if (data.data && data.data.valid) {
+               errEl.textContent = data.data.valid;
+               errEl.style.color = 'green';
+            } else if (data.error) {
+               errEl.textContent = data.error;
+               errEl.style.color = 'red';
+            } else if (data.valid) {
+               errEl.textContent = data.valid;
+               errEl.style.color = 'green';
+            }
+            errEl.classList.remove('none');
+         },
+         error: function () {
+            btn.disabled = false;
+            btn.textContent = '<?php echo esc_js(__('Test Connection', 'stars-smtp-mailer')); ?>';
+            errEl.textContent = '<?php echo esc_js(__('Request failed. Please try again.', 'stars-smtp-mailer')); ?>';
+            errEl.style.color = 'red';
+            errEl.classList.remove('none');
+         }
       });
    });
 })();

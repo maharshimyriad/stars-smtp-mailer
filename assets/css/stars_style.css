@@ -46,7 +46,7 @@ input[type="checkbox"] {
 	display: flex;
 	align-items: center;
 	gap: 10px;
-	margin:30px;
+	margin:30px 0;
 }
 
 #wpbody-content > h1::before {
@@ -674,4 +674,108 @@ input[type="checkbox"] {
 	.stars-float-right { float: none; }
 	.auto-fold #wpcontent { padding: 0 12px; }
 	#wpbody-content > h1 { font-size: 18px; }
+}
+
+/* ============================================================
+   Test connection button (accounts form)
+   ============================================================ */
+.stars-test-conn-btn {
+	margin-top: 8px !important;
+	display: inline-flex !important;
+	align-items: center;
+	gap: 5px;
+	font-size: 12.5px !important;
+}
+.stars-test-conn-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+/* ============================================================
+   Test email body textarea
+   ============================================================ */
+.stars-test-body {
+	width: 100% !important;
+	max-width: 520px;
+	min-height: 160px;
+	font-family: monospace;
+	font-size: 13px !important;
+	resize: vertical;
+}
+
+/* ============================================================
+   Export CSV button (email logs)
+   ============================================================ */
+.stars-export-csv-btn {
+	display: inline-flex !important;
+	align-items: center;
+	gap: 5px;
+	margin-left: 8px !important;
+	vertical-align: middle;
+	font-size: 13px !important;
+}
+.stars-export-csv-btn .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+/* ============================================================
+   Log cap warning — handled by WP notice classes, no extra CSS
+   needed. Only style the count highlight.
+   ============================================================ */
+.stars-log-count-warn { font-weight: 700; color: var(--stars-danger); }
+
+/* ============================================================
+   Email preview overlay close button focus ring
+   ============================================================ */
+#stars-preview-close:focus {
+	outline: 2px solid var(--stars-primary);
+	border-radius: 3px;
+}
+
+/* ============================================================
+   Dashboard widget chart styles
+   ============================================================ */
+.stars-widget-stats {
+	display: flex;
+	gap: 10px;
+	margin: 0 0 14px;
+	flex-wrap: wrap;
+}
+.stars-widget-stat {
+	flex: 1;
+	min-width: 72px;
+	background: #f6f7f7;
+	border-radius: 6px;
+	padding: 10px 10px 8px;
+	text-align: center;
+	border: 1px solid var(--stars-border);
+}
+.stars-widget-stat strong {
+	display: block;
+	font-size: 22px;
+	line-height: 1.2;
+	color: var(--stars-text);
+}
+.stars-widget-stat span {
+	font-size: 10.5px;
+	color: var(--stars-text-muted);
+	display: block;
+	margin-top: 2px;
+}
+.stars-widget-account {
+	font-size: 12px;
+	color: var(--stars-text-muted);
+	margin-top: 10px;
+	border-top: 1px solid var(--stars-border-light);
+	padding-top: 8px;
+}
+
+/* ============================================================
+   "Send Test" row action on accounts list
+   ============================================================ */
+.row-actions .test a {
+	color: var(--stars-primary);
+}
+.row-actions .test a:hover {
+	color: var(--stars-primary-hover);
+	text-decoration: underline;
 }

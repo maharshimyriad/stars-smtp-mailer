@@ -107,23 +107,18 @@ if (
                      <div class="form-group">
                         <label for="email_content"><?php echo esc_html__('Body:', 'stars-smtp-mailer'); ?></label>
                         <div class="input-area">
-                           <?php
-                           wp_editor(
-                              esc_html(
-                                 sprintf(
-                                    /* translators: %s is the site name (from get_bloginfo()). */
-                                    __('This is a Test Email from %s - Stars PHP Mailer', 'stars-smtp-mailer'),
-                                    get_bloginfo('name')
-                                 )
-                              ),
-                              'email_content',
-                              array(
-                                 'textarea_rows' => 10,
-                                 'media_buttons' => false,
-                                 'editor_class'  => 'required',
-                                 'width'         => 780,
-                              )
-                           ); ?>
+                           <textarea
+                              id="email_content"
+                              name="email_content"
+                              rows="10"
+                              class="required stars-test-body"
+                              placeholder="<?php echo esc_attr__('Enter email body (HTML allowed)', 'stars-smtp-mailer'); ?>"
+                           ><?php echo esc_textarea( sprintf(
+                              /* translators: %s is the site name */
+                              __( 'This is a Test Email from %s - Stars SMTP Mailer', 'stars-smtp-mailer' ),
+                              get_bloginfo('name')
+                           ) ); ?></textarea>
+                           <p class="stars-input-tooltip"><?php esc_html_e('Plain text or HTML accepted.', 'stars-smtp-mailer'); ?></p>
                         </div>
                      </div>
                      <div class="form-group">
@@ -133,10 +128,13 @@ if (
                         </div>
                      </div>
                      <div class="form-group">
-                        <input type="submit" class="button button-primary" name="send_test" id="send_test"
-                           value="<?php echo esc_attr__('Send', 'stars-smtp-mailer'); ?>"
-                           onclick="return SetEmailBody();" />
-                        <?php wp_nonce_field('stars_smtpm-testing-email'); ?>
+                        <label></label>
+                        <div class="input-area stars-form-actions">
+                           <input type="submit" class="button button-primary" name="send_test" id="send_test"
+                              value="<?php echo esc_attr__('Send Test Email', 'stars-smtp-mailer'); ?>"
+                              onclick="return SetEmailBody();" />
+                           <?php wp_nonce_field('stars_smtpm-testing-email'); ?>
+                        </div>
                      </div>
                   </div>
                </form>

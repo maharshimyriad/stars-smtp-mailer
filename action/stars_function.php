@@ -670,6 +670,11 @@ function stars_smtpm_insert_email_log($mail_log)
 
 	$rowcount = $wpdb->get_var("SELECT COUNT(*) FROM {$table_name}");
 
+	// Warn admin when approaching the 200-row cap
+	if ( (int) $rowcount >= 180 ) {
+		set_transient( 'stars_smtpm_log_cap_warning', (int) $rowcount, 12 * HOUR_IN_SECONDS );
+	}
+
 	if ($rowcount >= 200) {
 		$result = $wpdb->query("DELETE FROM {$table_name} ORDER BY log_id ASC LIMIT 1");
 		if ($result) {
