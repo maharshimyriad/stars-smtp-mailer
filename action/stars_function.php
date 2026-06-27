@@ -407,7 +407,9 @@ if (!function_exists('wp_mail')) {
 			$phpmailer->clearReplyTos();
 
 			if (!isset($from_name))  $from_name  = $stars_smtpm_data['from_name'];
-			if (!isset($from_email)) $from_email = $stars_smtpm_data['from_email'];
+			// Always use the SMTP account's from_email — ignore any value parsed from
+			// caller-supplied headers so WordPress core / other plugins can't override it.
+			$from_email = $stars_smtpm_data['from_email'];
 
 			// Fix #9: use home_url() instead of $_SERVER['SERVER_NAME']
 			if (empty($from_email)) {
@@ -418,8 +420,10 @@ if (!function_exists('wp_mail')) {
 				$from_email = 'wordpress@' . $sitename;
 			}
 
-			$from_email = apply_filters('wp_mail_from', $from_email);
-			$from_name  = apply_filters('wp_mail_from_name', $from_name);
+			// Do NOT pass through wp_mail_from filter — it lets WP core / other plugins
+			// override the address with the server default (e.g. info@hostingersite.com).
+			// $from_name still goes through its filter so themes can customise the display name.
+			$from_name = apply_filters('wp_mail_from_name', $from_name);
 
 			try {
 				$phpmailer->setFrom($from_email, $from_name, false);
@@ -474,11 +478,13 @@ if (!function_exists('wp_mail')) {
 				$phpmailer->Password = stars_smtpm_pass_enc_dec($stars_smtpm_data['pass'], 'dec');
 			}
 
-			$type_of_encryption = $stars_smtpm_data['encryption'];
-			if ($type_of_encryption == '0') $type_of_encryption = '';
-			$phpmailer->SMTPSecure  = $type_of_encryption;
-			$phpmailer->Port        = $stars_smtpm_data['smtp_port'];
-			$phpmailer->SMTPAutoTLS = false;
+			$type_of_encryption = strtolower( trim( $stars_smtpm_data['encryption'] ) );
+			if ( $type_of_encryption === '0' || $type_of_encryption === 'none' ) {
+				$type_of_encryption = '';
+			}
+			$phpmailer->SMTPSecure  = $type_of_encryption;          // 'tls', 'ssl', or ''
+			$phpmailer->Port        = (int) $stars_smtpm_data['smtp_port'];
+			$phpmailer->SMTPAutoTLS = false;                         // never auto-upgrade to TLS
 
 			if (!isset($content_type)) {
 				$content_type = 'text/html';

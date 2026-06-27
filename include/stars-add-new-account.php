@@ -134,20 +134,30 @@ $title = $is_edit
                      <div class="form-group">
                         <label><?php esc_html_e('Encryption', 'stars-smtp-mailer'); ?> <span class="req-star" aria-hidden="true">*</span></label>
                         <div class="input-area">
+                           <?php
+                           // Priority: POST (re-display after error) > DB value (edit) > default (new)
+                           if ( isset( $_POST['encryption'] ) ) {
+                              $enc_val = sanitize_text_field( $_POST['encryption'] );
+                           } elseif ( $is_edit ) {
+                              $enc_val = $e_result['encryption'];
+                           } else {
+                              $enc_val = 'tls';
+                           }
+                           ?>
                            <div class="stars-radio-group" role="radiogroup" aria-label="<?php esc_attr_e('Encryption type', 'stars-smtp-mailer'); ?>">
                               <label class="stars-radio-pill">
                                  <input name="encryption" type="radio" id="enc_tls" value="tls"
-                                    <?php echo $is_edit ? ($e_result['encryption'] == 'tls' ? 'checked' : '') : 'checked'; ?> />
+                                    <?php checked( $enc_val, 'tls' ); ?> />
                                  <?php esc_html_e('TLS', 'stars-smtp-mailer'); ?>
                               </label>
                               <label class="stars-radio-pill">
                                  <input name="encryption" type="radio" id="enc_ssl" value="ssl"
-                                    <?php echo ($is_edit && $e_result['encryption'] == 'ssl') ? 'checked' : ''; ?> />
+                                    <?php checked( $enc_val, 'ssl' ); ?> />
                                  <?php esc_html_e('SSL', 'stars-smtp-mailer'); ?>
                               </label>
                               <label class="stars-radio-pill">
                                  <input name="encryption" type="radio" id="enc_none" value="none"
-                                    <?php echo ($is_edit && $e_result['encryption'] == 'none') ? 'checked' : ''; ?> />
+                                    <?php checked( $enc_val, 'none' ); ?> />
                                  <?php esc_html_e('None', 'stars-smtp-mailer'); ?>
                               </label>
                            </div>
@@ -160,15 +170,24 @@ $title = $is_edit
                      <div class="form-group">
                         <label><?php esc_html_e('Authentication', 'stars-smtp-mailer'); ?> <span class="req-star" aria-hidden="true">*</span></label>
                         <div class="input-area">
+                           <?php
+                           if ( isset( $_POST['auth'] ) ) {
+                              $auth_val = (int) $_POST['auth'];
+                           } elseif ( $is_edit ) {
+                              $auth_val = (int) $e_result['auth'];
+                           } else {
+                              $auth_val = 1;
+                           }
+                           ?>
                            <div class="stars-radio-group" role="radiogroup" aria-label="<?php esc_attr_e('Authentication', 'stars-smtp-mailer'); ?>">
                               <label class="stars-radio-pill">
                                  <input name="auth" type="radio" id="auth_true" value="1"
-                                    <?php echo $is_edit ? ($e_result['auth'] == 1 ? 'checked' : '') : 'checked'; ?> />
+                                    <?php checked( $auth_val, 1 ); ?> />
                                  <?php esc_html_e('Enabled', 'stars-smtp-mailer'); ?>
                               </label>
                               <label class="stars-radio-pill">
                                  <input name="auth" type="radio" id="auth_false" value="0"
-                                    <?php echo ($is_edit && $e_result['auth'] == 0) ? 'checked' : ''; ?> />
+                                    <?php checked( $auth_val, 0 ); ?> />
                                  <?php esc_html_e('Disabled', 'stars-smtp-mailer'); ?>
                               </label>
                            </div>
