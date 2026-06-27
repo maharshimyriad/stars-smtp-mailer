@@ -458,33 +458,7 @@ if (!function_exists('wp_mail')) {
 				}
 			}
 
-			$phpmailer->isSMTP();
-			$phpmailer->Host       = $stars_smtpm_data['smtp_host'];
-			$phpmailer->Timeout    = 15; // seconds — PHPMailer default is 300, which causes long hangs on bad connections
-			// On Windows/XAMPP, SSL certificate CRL lookups cause 10-30s delays.
-			// Disabling peer verification removes that DNS round-trip while keeping
-			// the connection encrypted. Acceptable for local dev; remove for production.
-			$phpmailer->SMTPOptions = array(
-				'ssl' => array(
-					'verify_peer'       => false,
-					'verify_peer_name'  => false,
-					'allow_self_signed' => true,
-				),
-			);
-
-			if (isset($stars_smtpm_data['auth']) && $stars_smtpm_data['auth'] == 1) {
-				$phpmailer->SMTPAuth = true;
-				$phpmailer->Username = $stars_smtpm_data['username'];
-				$phpmailer->Password = stars_smtpm_pass_enc_dec($stars_smtpm_data['pass'], 'dec');
-			}
-
-			$type_of_encryption = strtolower( trim( $stars_smtpm_data['encryption'] ) );
-			if ( $type_of_encryption === '0' || $type_of_encryption === 'none' ) {
-				$type_of_encryption = '';
-			}
-			$phpmailer->SMTPSecure  = $type_of_encryption;          // 'tls', 'ssl', or ''
-			$phpmailer->Port        = (int) $stars_smtpm_data['smtp_port'];
-			$phpmailer->SMTPAutoTLS = false;                         // never auto-upgrade to TLS
+			// SMTP connection settings — applied again after phpmailer_init (see below) to prevent override by other hooks
 
 			if (!isset($content_type)) {
 				$content_type = 'text/html';
@@ -551,6 +525,39 @@ if (!function_exists('wp_mail')) {
 
 			do_action_ref_array('phpmailer_init', array(&$phpmailer));
 
+			// Re-apply SMTP settings AFTER phpmailer_init — hooks from WP core or other
+			// plugins can overwrite Host/Port/Auth/Encryption, so we always set them last.
+			$phpmailer->isSMTP();
+			$phpmailer->Host     = $stars_smtpm_data['smtp_host'];
+			$phpmailer->Port     = (int) $stars_smtpm_data['smtp_port'];
+			$phpmailer->Timeout  = 15;
+			$phpmailer->SMTPOptions = array(
+				'ssl' => array(
+					'verify_peer'       => false,
+					'verify_peer_name'  => false,
+					'allow_self_signed' => true,
+				),
+			);
+			$_enc = strtolower( trim( $stars_smtpm_data['encryption'] ) );
+			if ( $_enc === '0' || $_enc === 'none' ) $_enc = '';
+			$phpmailer->SMTPSecure  = $_enc;
+			$phpmailer->SMTPAutoTLS = false;
+
+			if ( isset( $stars_smtpm_data['auth'] ) && $stars_smtpm_data['auth'] == 1 ) {
+				$phpmailer->SMTPAuth = true;
+				$phpmailer->Username = $stars_smtpm_data['username'];
+				$phpmailer->Password = stars_smtpm_pass_enc_dec( $stars_smtpm_data['pass'], 'dec' );
+			} else {
+				$phpmailer->SMTPAuth = false;
+			}
+
+			// Capture SMTP debug transcript into a variable for logging
+			$smtp_debug_output = '';
+			$phpmailer->SMTPDebug  = 2; // CLIENT + SERVER messages
+			$phpmailer->Debugoutput = function( $str ) use ( &$smtp_debug_output ) {
+				$smtp_debug_output .= $str . "\n";
+			};
+
 			try {
 				if ($phpmailer->send()) {
 					global $msg;
@@ -573,7 +580,7 @@ if (!function_exists('wp_mail')) {
 						'sub'         => $subject,
 						'mail_body'   => $msg,
 						'status'      => 'Sent',
-						'debug_op'    => 'Email has been sent successfully',
+						'debug_op'    => trim( $smtp_debug_output ) ?: 'Email has been sent successfully',
 						'mail_type'   => $mail_type,
 						'mail_date'   => $mail_date,
 						'attachment'  => is_array( $attachmentData ) ? wp_json_encode( $attachmentData ) : '',
@@ -607,7 +614,7 @@ if (!function_exists('wp_mail')) {
 					'sub'        => $subject,
 					'mail_body'  => $msg,
 					'status'     => 'Unsent',
-					'debug_op'   => $e->getMessage(),
+					'debug_op'   => $e->getMessage() . ( $smtp_debug_output ? "\n" . $smtp_debug_output : '' ),
 					'mail_type'  => $mail_type,
 					'mail_date'  => $mail_date,
 					'attachment' => is_array( $attachmentData ) ? wp_json_encode( $attachmentData ) : '',
