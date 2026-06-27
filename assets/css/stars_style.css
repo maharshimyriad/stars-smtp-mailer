@@ -48,6 +48,7 @@ input[type="checkbox"] {
 	gap: 10px;
 	margin-top:40px;
 }
+
 #wpbody-content > h1::before {
 	content: "";
 	display: inline-block;
