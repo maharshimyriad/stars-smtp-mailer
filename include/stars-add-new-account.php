@@ -110,7 +110,6 @@ $title = $is_edit
                            <p class="stars-input-tooltip">
                               <?php esc_html_e('The hostname of your SMTP server.', 'stars-smtp-mailer'); ?>
                            </p>
-
                         </div>
                      </div>
 
@@ -196,11 +195,6 @@ $title = $is_edit
                            </p>
                         </div>
                      </div>
-
-                                                <span class="check_error none"></span>
-                           <button type="button" id="stars-test-connection" class="button stars-test-conn-btn">
-                              <?php esc_html_e('Test Connection', 'stars-smtp-mailer'); ?>
-                           </button>
 
                      <!-- ==========================================
                           Section 2: Credentials
