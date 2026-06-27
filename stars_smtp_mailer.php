@@ -242,15 +242,15 @@ function stars_smtpm_activation_notice()
 
 function stars_smtpm_admin_menu()
 {
-    // Fix #10: use 'manage_options' instead of 0 so only admins can access these pages
-    $emaillog_menu    = add_menu_page('Stars SMTP Mailer', 'Stars SMTP Mailer', 'manage_options', 'stars-smtpm-email-log', 'stars_smtpm_email_log', 'dashicons-email-alt');
-    $emaillog_menu    = add_submenu_page('stars-smtpm-email-log', 'Email Log',       'Email Log',       'manage_options', 'stars-smtpm-email-log',   'stars_smtpm_email_log');
-    $smtpaddAcc_menu  = add_submenu_page('stars-smtpm-email-log', 'Add New Account', 'Add New Account', 'manage_options', 'stars-smtpm-new-account', 'stars_smtpm_new_account');
-    $smtpaccount_menu = add_submenu_page('stars-smtpm-email-log', 'SMTP Accounts',   'SMTP Accounts',   'manage_options', 'stars-smtpm-accounts',    'stars_smtpm_smtp_account');
-    $smtpTest_menu    = add_submenu_page('stars-smtpm-email-log', 'Test Email',       'Test Email',      'manage_options', 'stars-smtpm-test-mail',   'stars_smtpm_mail_test');
+    $dashboard_menu   = add_menu_page('Stars SMTP Mailer', 'Stars SMTP Mailer', 'manage_options', 'stars-smtpm-dashboard', 'stars_smtpm_dashboard_page', 'dashicons-email-alt');
+    add_submenu_page('stars-smtpm-dashboard', 'Dashboard',       'Dashboard',       'manage_options', 'stars-smtpm-dashboard',   'stars_smtpm_dashboard_page');
+    $emaillog_menu    = add_submenu_page('stars-smtpm-dashboard', 'Email Log',       'Email Log',       'manage_options', 'stars-smtpm-email-log',   'stars_smtpm_email_log');
+    add_submenu_page('stars-smtpm-dashboard', 'Add New Account', 'Add New Account', 'manage_options', 'stars-smtpm-new-account', 'stars_smtpm_new_account');
+    $smtpaccount_menu = add_submenu_page('stars-smtpm-dashboard', 'SMTP Accounts',  'SMTP Accounts',   'manage_options', 'stars-smtpm-accounts',    'stars_smtpm_smtp_account');
+    $smtpTest_menu    = add_submenu_page('stars-smtpm-dashboard', 'Test Email',      'Test Email',      'manage_options', 'stars-smtpm-test-mail',   'stars_smtpm_mail_test');
 
-    add_action("load-$smtpaccount_menu", 'stars_smtpm_accounts_add_option'); //To add screen option
-    add_action("load-$emaillog_menu", 'stars_smtpm_email_log_add_option'); //To add screen option
+    add_action("load-$smtpaccount_menu", 'stars_smtpm_accounts_add_option');
+    add_action("load-$emaillog_menu",    'stars_smtpm_email_log_add_option');
 }
 
 //Screen option for Email Logs
@@ -291,22 +291,11 @@ function stars_smtpm_account_set_option($status, $option, $value)
     return $status;
 }
 
-function stars_smtpm_mail_test()
-{
-    include_once("include/stars-test-email.php");
-}
-function stars_smtpm_new_account()
-{
-    include_once('include/stars-add-new-account.php');
-}
-function stars_smtpm_smtp_account()
-{
-    include_once('include/stars-smtp-accounts-list.php');
-}
-function stars_smtpm_email_log()
-{
-    include_once('include/stars-email-logs.php');
-}
+function stars_smtpm_mail_test()   { include_once("include/stars-test-email.php"); }
+function stars_smtpm_new_account() { include_once('include/stars-add-new-account.php'); }
+function stars_smtpm_smtp_account(){ include_once('include/stars-smtp-accounts-list.php'); }
+function stars_smtpm_email_log()   { include_once('include/stars-email-logs.php'); }
+function stars_smtpm_dashboard_page(){ include_once('include/stars-dashboard.php'); }
 
 /**
  * Show a notice on the email log page when row count >= 180.
@@ -488,16 +477,19 @@ function stars_smtpm_mailer_assets($hook)
     ));
 
 
-    if ($hook == "stars-smtp-mailer_page_stars-smtpm-test-mail" || $hook == "stars-smtp-mailer_page_stars-smtpm-new-account")
+    if ($hook == "stars-smtp-mailer_page_stars-smtpm-test-mail"
+        || $hook == "stars-smtp-mailer_page_stars-smtpm-new-account"
+        || $hook == "toplevel_page_stars-smtpm-dashboard") {
         wp_enqueue_script("stars_jquery_validation", STARS_SMTPM_PLUGIN_URL . '/' . basename(dirname(__FILE__)) . '/assets/js/jquery.validate.js');
+    }
 
-    if ($hook == "toplevel_page_stars-smtpm-email-log" || $hook == "stars-smtp-mailer_page_stars-smtpm-accounts") {
+    if ($hook == "stars-smtp-mailer_page_stars-smtpm-email-log"
+        || $hook == "stars-smtp-mailer_page_stars-smtpm-accounts"
+        || $hook == "toplevel_page_stars-smtpm-dashboard") {
         wp_enqueue_script('jquery-ui-datepicker');
         wp_enqueue_script('jquery-ui-tooltip');
         wp_enqueue_script('jquery-ui-dialog');
-
         wp_enqueue_style("stars_jquery_ui_css", STARS_SMTPM_PLUGIN_URL . '/' . basename(dirname(__FILE__)) . '/assets/css/jquery-ui.css');
-        // thickbox removed — email body preview now uses a sandboxed iframe modal
     }
 }
 

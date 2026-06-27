@@ -74,12 +74,12 @@ $export_url = wp_nonce_url(
 
         <!-- Tabs -->
         <div style="display:flex;gap:0;padding:0 20px;margin-top:14px;border-bottom:2px solid #f0f0f1;">
-            <button type="button" class="stars-err-tab stars-err-tab--active" data-tab="plain"
-                style="padding:8px 18px;font-size:13px;font-weight:600;background:none;border:none;border-bottom:2px solid #2271b1;margin-bottom:-2px;cursor:pointer;color:#2271b1;">
+            <button type="button" class="stars-err-tab" data-tab="plain"
+                style="padding:8px 18px;font-size:13px;font-weight:600;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;">
                 <?php esc_html_e('What happened?', 'stars-smtp-mailer'); ?>
             </button>
             <button type="button" class="stars-err-tab" data-tab="technical"
-                style="padding:8px 18px;font-size:13px;font-weight:600;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;color:#646970;">
+                style="padding:8px 18px;font-size:13px;font-weight:600;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;">
                 <?php esc_html_e('Technical details', 'stars-smtp-mailer'); ?>
             </button>
         </div>
@@ -111,7 +111,13 @@ $export_url = wp_nonce_url(
 
         <!-- Footer -->
         <div style="padding:12px 22px;border-top:1px solid #f0f0f1;display:flex;justify-content:flex-end;">
-            <a href="<?php echo esc_url(admin_url('admin.php?page=stars-smtpm-new-account')); ?>"
+            <?php
+            $active_acc = stars_smtpm_get_smtp_account();
+            $edit_url   = $active_acc
+                ? admin_url( 'admin.php?page=stars-smtpm-new-account&action=edit&id=' . intval( $active_acc['id'] ) )
+                : admin_url( 'admin.php?page=stars-smtpm-accounts' );
+            ?>
+            <a href="<?php echo esc_url( $edit_url ); ?>"
                 style="font-size:13px;color:#2271b1;text-decoration:none;margin-right:auto;line-height:32px;">
                 &#9998; <?php esc_html_e('Check account settings', 'stars-smtp-mailer'); ?>
             </a>
@@ -243,8 +249,8 @@ $export_url = wp_nonce_url(
             $('#stars-err-technical-text').text(technical || '(no debug output recorded)');
 
             // Reset to plain tab
-            $('.stars-err-tab').css({ 'color': '#646970', 'border-bottom-color': 'transparent' });
-            $('.stars-err-tab[data-tab="plain"]').css({ 'color': '#2271b1', 'border-bottom-color': '#2271b1' });
+            $('.stars-err-tab').removeClass('stars-err-tab--active');
+            $('.stars-err-tab[data-tab="plain"]').addClass('stars-err-tab--active');
             $('#stars-err-panel-plain').show();
             $('#stars-err-panel-technical').hide();
 
@@ -253,8 +259,8 @@ $export_url = wp_nonce_url(
 
         $(document).on('click', '.stars-err-tab', function () {
             var tab = $(this).data('tab');
-            $('.stars-err-tab').css({ 'color': '#646970', 'border-bottom-color': 'transparent' });
-            $(this).css({ 'color': '#2271b1', 'border-bottom-color': '#2271b1' });
+            $('.stars-err-tab').removeClass('stars-err-tab--active');
+            $(this).addClass('stars-err-tab--active');
             $('.stars-err-panel').hide();
             $('#stars-err-panel-' + tab).show();
         });
